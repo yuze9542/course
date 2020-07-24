@@ -1,19 +1,18 @@
-package com.course.system.service;
+package com.course.server.service;
 
-import com.course.system.domain.NewTable;
-import com.course.system.mapper.TestMapper;
+import com.course.server.domain.NewTable;
+import com.course.server.mapper.TestMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@Service("testService")
+@Service
 public class TestService {
     @Resource
     private TestMapper testMapper;
 
     public List<NewTable> list(){
-        System.out.println(testMapper.list());
         return testMapper.list();
     }
 }

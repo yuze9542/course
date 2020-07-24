@@ -7,6 +7,7 @@
         <module>eureka</module>
         <module>system</module>
         <module>gateway</module>
+        <module>server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -47,7 +48,13 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.44</version>
             </dependency>
+            <dependency>
+                <groupId>com.course</groupId>
+                <artifactId>server</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
 
     <build>
