@@ -13,6 +13,7 @@ public class TestService {
     private TestMapper testMapper;
 
     public List<NewTable> list(){
+        System.out.println("111111111111111");
         return testMapper.list();
     }
 }
