@@ -1,0 +1,14 @@
+7.24:
+    创建项目:
+        eureka  注册中心:其他东西注册到这里
+        system 好像没干啥 三板斧头 ==> 配置依赖 写application.properties 修改xxxApplication主函数 然后再写写日志文件
+        gateway 将system模块的9001端口隐藏,接到9000端口
+
+7.25:
+    集成mybatis框架:
+    生成热部署DevTools 引入jar包 spring-boot-devtools
+
+
+
+7.26:
+
