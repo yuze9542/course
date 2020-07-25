@@ -1,6 +1,8 @@
 package com.course.business.controller;
 
+import com.course.server.domain.Chapter;
 import com.course.server.domain.NewTable;
+import com.course.server.service.ChapterService;
 import com.course.server.service.TestService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,13 +13,13 @@ import java.util.List;
 //如果返回的是json格式的数据 用RestController
 //如果返回的是页面 就是Controller
 @RestController
-public class TestController {
+public class ChapterController {
 
     @Resource
-    TestService testService ;
+    ChapterService chapterService ;
 
-    @RequestMapping("/test")
-    public List<NewTable> test(){
-       return testService.list();
+    @RequestMapping("/chapter")
+    public List<Chapter> test(){
+       return chapterService.list();
     }
 }
