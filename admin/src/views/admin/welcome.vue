@@ -7,7 +7,7 @@
     export default {
         name: 'welcome',
         mounted: function () {
-            this.$parent.activeSidebar("welcome-sidebar")
+            // this.$parent.activeSidebar("welcome-sidebar")
         }
     }
 </script>
