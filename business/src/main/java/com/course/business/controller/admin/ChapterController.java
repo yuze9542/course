@@ -14,14 +14,14 @@ import java.util.List;
 //如果返回的是json格式的数据 用RestController
 //如果返回的是页面 就是Controller
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/chapter")
 public class ChapterController {
 
     @Resource
     ChapterService chapterService ;
 
-    @RequestMapping("/chapter")
-    public List<ChapterDto> test(){
+    @RequestMapping("/list")
+    public List<ChapterDto> list(){
        return chapterService.list();
     }
 }
