@@ -3,12 +3,16 @@
         eureka  注册中心:其他东西注册到这里
         system 好像没干啥 三板斧头 ==> 配置依赖 写application.properties 修改xxxApplication主函数 然后再写写日志文件
         gateway 将system模块的9001端口隐藏,接到9000端口
-
-7.25:
     集成mybatis框架:
     生成热部署DevTools 引入jar包 spring-boot-devtools
 
 
+7.25:
+    写了前端页面:
+        axios ==> 跨域会有问题:
+            解决方法一:  server模块的config包下面的代码: CorsConfig (单个springboot项目)
+            解决方法二:  若gateway设置了跨域 就在gateway入口类设置一段函数: CorsWebFilter (springcloud gateway使用)
+    实现了一个简单的前后端链接的页面
 
 7.26:
 
