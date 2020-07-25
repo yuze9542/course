@@ -3,6 +3,7 @@ import Router from "vue-router"
 import Login from "./views/login.vue"
 import Admin from "./views/admin.vue"
 import Welcome from "./views/admin/welcome.vue"
+import Chapter from "./views/admin/chapter.vue"
 
 Vue.use(Router);
 
@@ -24,6 +25,9 @@ export default new Router({
         children:[{
             path: "welcome", //子路由不用 / 标志
             component: Welcome,
+        },{
+            path: "business/chapter",
+            component: Chapter,
         }]
     }]
 })
