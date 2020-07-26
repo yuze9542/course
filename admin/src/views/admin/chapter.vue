@@ -88,7 +88,7 @@
         刷新
       </button>
     </p>
-    <div class="modal fade" tabindex="-1" role="dialog">
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -99,15 +99,15 @@
           <div class="modal-body">
             <form class="form-horizontal">
               <div class="form-group">
-                <label  class="col-sm-2 control-label">名称</label>
+                <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
-                  <input  class="form-control"  placeholder="名称">
+                  <input v-model="chapter.name"   class="form-control"  placeholder="名称">
                 </div>
               </div>
               <div class="form-group">
                 <label  class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
-                  <input  class="form-control"  placeholder="课程ID">
+                  <input  v-model="chapter.courseId"  class="form-control"  placeholder="课程ID">
                 </div>
               </div>
             </form>
@@ -116,7 +116,7 @@
 <!--            data-dismiss="modal" 关闭css名称为modal的选择器
                 data-toggle="modal" 开启css名称为modal的选择器 -->
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">保存</button>
+            <button @click="save()" type="button" class="btn btn-primary">保存</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -132,6 +132,8 @@
         components: {Pagination},
         data: function () {
             return {
+                //chapter绑定表单数据
+                chapter: {},
                 chapters: []
             }
         },
@@ -149,13 +151,26 @@
                     size: _this.$refs.pagination.size,
                 }).then((response) => {
                     console.log("查询大章列表:", response);
-                    _this.chapters = response.data.list;
-                    _this.$refs.pagination.render(page, response.data.total)
+                    let resp = response.data;
+                    _this.chapters = resp.content.list;
+                    _this.$refs.pagination.render(page, resp.content.total)
+                })
+            },
+            save(){
+                let _this = this;
+                _this.$ajax.post("http://127.0.0.1:9000/business/admin/chapter/save",
+                _this.chapter).then((response) => {
+                    console.log("保存大章列表:", response);
+                    let resp = response.data;
+                    if(resp.success){
+                        $("#form-modal").modal("hide");
+                        _this.list(1);
+                    }
                 })
             },
             add(){
                 let _this = this;
-                $(".modal").modal("show");
+                $("#form-modal").modal("show");
             }
         }
     }

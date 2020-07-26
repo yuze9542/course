@@ -5,6 +5,7 @@ import com.course.server.domain.ChapterExample;
 import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
+import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +21,7 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
-    public void list(@RequestBody PageDto pageDto){
+    public void list( PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         ChapterExample chapterExample = new ChapterExample();
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);
@@ -37,4 +38,13 @@ public class ChapterService {
 //        return pageDto;
 
     }
+
+    public void save(ChapterDto chapterDto){
+        Chapter chapter = new Chapter();
+        chapterDto.setId(UuidUtil.getShortUuid());
+        BeanUtils.copyProperties(chapterDto,chapter);
+        chapterMapper.insert(chapter);
+    }
+
+
 }
