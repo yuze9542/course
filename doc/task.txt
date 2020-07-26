@@ -22,6 +22,7 @@
     jquery blockUI 实现loading等待框
     data-dismiss="modal": 关闭css名称为modal的选择器
     data-toggle="modal": 开启css名称为modal的选择器 -->  bootstrap知识点
+    前端判断值不能为空进行校验 用了validator.js
 
 7.27:
 
