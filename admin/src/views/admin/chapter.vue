@@ -137,7 +137,7 @@
                     text: "删掉可就没了",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: '#6085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: '老子确定要删掉它'
                 }).then((result) => {
@@ -163,11 +163,13 @@
             },
             list(page) {
                 let _this = this;
+                Loading.show();
                 //得到数据
                 _this.$ajax.post("http://127.0.0.1:9000/business/admin/chapter/list", {
                     page: page,
                     size: _this.$refs.pagination.size,
                 }).then((response) => {
+                    Loading.hide();
                     console.log("查询大章列表:", response);
                     let resp = response.data;
                     _this.chapters = resp.content.list;
@@ -176,8 +178,10 @@
             },
             save(){
                 let _this = this;
+                Loading.show();
                 _this.$ajax.post("http://127.0.0.1:9000/business/admin/chapter/save",
                 _this.chapter).then((response) => {
+                    Loading.hide();
                     console.log("保存大章列表:", response);
                     let resp = response.data;
                     if(resp.success){

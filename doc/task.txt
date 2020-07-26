@@ -19,6 +19,9 @@
 7.26:
 
     sweetalert2 实现确认框
+    jquery blockUI 实现loading等待框
+    data-dismiss="modal": 关闭css名称为modal的选择器
+    data-toggle="modal": 开启css名称为modal的选择器 -->  bootstrap知识点
 
 7.27:
 
