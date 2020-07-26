@@ -40,10 +40,10 @@ public class ChapterController {
 
     @RequestMapping("/save")
     public ResponseDto save(@RequestBody ChapterDto chapterDto){
-        LOG.info("chapterDto: {}",chapterDto);
         ResponseDto responseDto = new ResponseDto();
-        chapterService.save(chapterDto);
+        LOG.info("chapterDto: {}",chapterDto);
         responseDto.setContent(chapterDto);
+        chapterService.save(chapterDto);
         return responseDto;
     }
 
