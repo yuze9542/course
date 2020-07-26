@@ -39,16 +39,9 @@
 
               <ul
                 class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                <li>
-                  <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																			<span class="blue">
-																				<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																			</span>
-                  </a>
-                </li>
 
                 <li>
-                  <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                  <a href="#" @click="edit(chapter)"   class="tooltip-success" data-rel="tooltip" title="Edit">
 																			<span class="green">
 																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																			</span>
@@ -56,7 +49,7 @@
                 </li>
 
                 <li>
-                  <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                  <a href="#"  @click="del(chapter.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
 																			<span class="red">
 																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																			</span>
@@ -138,14 +131,30 @@
         methods: {
             del(id){
                 let _this = this;
-                //得到数据
-                _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response) => {
-                    console.log("删除大章列表:", response);
-                    let resp = response.data;
-                    if(resp.success){
-                        this.list(1);
+
+                Swal.fire({
+                    title: '您真的要删掉?',
+                    text: "删掉可就没了",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '老子确定要删掉它'
+                }).then((result) => {
+                    if (result.value) {
+                        //删除方法
+                        _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response) => {
+                            console.log("删除大章列表:", response);
+                            let resp = response.data;
+                            if(resp.success){
+                                this.list(1);
+                                toast.success("删除成功")
+                            }
+                        })
                     }
                 })
+
+
             },
             edit(chapter){
                 let _this = this;
@@ -174,6 +183,7 @@
                     if(resp.success){
                         $("#form-modal").modal("hide");
                         _this.list(1);
+                        toast.success("保存成功")
                     }
                 })
             },
