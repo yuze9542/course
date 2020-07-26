@@ -131,28 +131,20 @@
         methods: {
             del(id){
                 let _this = this;
-
-                Swal.fire({
-                    title: '您真的要删掉?',
-                    text: "删掉可就没了",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#6085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: '老子确定要删掉它'
-                }).then((result) => {
-                    if (result.value) {
-                        //删除方法
-                        _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response) => {
-                            console.log("删除大章列表:", response);
-                            let resp = response.data;
-                            if(resp.success){
-                                this.list(1);
-                                toast.success("删除成功")
-                            }
-                        })
-                    }
+                Confirm.show("删掉可就没了",function () {
+                    //删除方法
+                    Loading.show()
+                    _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response) => {
+                        Loading.hide()
+                        console.log("删除大章列表:", response);
+                        let resp = response.data;
+                        if(resp.success){
+                            this.list(1);
+                            Toast.success("删除成功")
+                        }
+                    })
                 })
+
 
 
             },
@@ -187,7 +179,7 @@
                     if(resp.success){
                         $("#form-modal").modal("hide");
                         _this.list(1);
-                        toast.success("保存成功")
+                        Toast.success("保存成功")
                     }
                 })
             },
