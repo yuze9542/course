@@ -17,14 +17,13 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/admin/chapter")
 public class ChapterController {
-    private static final Logger LOG = LoggerFactory.getLogger(ChapterController.class);
+//    private static final Logger LOG = LoggerFactory.getLogger(ChapterController.class);
     public static final String BUSINESS_NAME = "大章";
     @Resource
     ChapterService chapterService ;
 
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto){
-        LOG.info("pageDto: {}",pageDto);
         ResponseDto responseDto = new ResponseDto();
        chapterService.list(pageDto);
        responseDto.setContent(pageDto);
@@ -36,7 +35,6 @@ public class ChapterController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody ChapterDto chapterDto){
 
-        LOG.info("chapterDto: {}",chapterDto);
 
         ValidatorUtil.require(chapterDto.getName(),"名称");
         ValidatorUtil.require(chapterDto.getCourseId(),"课程Id");
@@ -50,7 +48,6 @@ public class ChapterController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id){
-        LOG.info("id: {}",id);
         ResponseDto responseDto = new ResponseDto();
         chapterService.delete(id);
         return responseDto;

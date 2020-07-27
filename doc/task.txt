@@ -14,6 +14,7 @@
             解决方法二:  若gateway设置了跨域 就在gateway入口类设置一段函数: CorsWebFilter (springcloud gateway使用)
     实现了一个简单的前后端链接的页面
     分页插件 myabtis pagehelper  : 好像对版本要求很苛刻 mysql 5.1.37  pagehelper 1.2.12
+      generatorConfig.xml 生成mybatis相关mapper等
     分页前后端交互 axios的post有流(json)或表单方式传递 所以controller参数里要加@RequsetBody注解
 
 7.26:
@@ -23,6 +24,12 @@
     data-dismiss="modal": 关闭css名称为modal的选择器
     data-toggle="modal": 开启css名称为modal的选择器 -->  bootstrap知识点
     前端判断值不能为空进行校验 用了validator.js
+    前后端校验: 后端用了抛throw异常等一系列复杂操作
+    修改了日志方式 AOP拦截
+    前端里 axios 有可能 response代表返回 request代表请求
 
 7.27:
+    代码生成器: freemarker 先生成jar包 然后有一个util类生成的
+
+7.28:
 

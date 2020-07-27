@@ -30,7 +30,10 @@ public class LogAspect {
 
     private final static Logger LOG = LoggerFactory.getLogger(LogAspect.class);
 
-    /** 定义一个切点 */
+    /**
+     * 定义一个切点
+     * 所有Controller都打印信息 了
+     * */
     @Pointcut("execution(public * com.course.*.controller..*Controller.*(..))")
     public void controllerPointcut() {}
 
