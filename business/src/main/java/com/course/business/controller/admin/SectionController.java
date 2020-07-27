@@ -33,12 +33,6 @@ public class SectionController {
 
     @PostMapping("/save")
     public ResponseDto save(@RequestBody SectionDto sectionDto){
-
-
-        //ValidatorUtil.require(sectionDto.getName(),"名称");
-        //ValidatorUtil.require(sectionDto.getCourseId(),"课程Id");
-        //ValidatorUtil.length(sectionDto.getCourseId(),"课程Id",1,8);
-
         ResponseDto responseDto = new ResponseDto();
         responseDto.setContent(sectionDto);
         sectionService.save(sectionDto);

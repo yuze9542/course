@@ -6,59 +6,58 @@
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
       <tr>
-
-        <th>ID</th>
-        <th>名称</th>
-        <th>课程ID</th>
-        <th>操作</th>
+        <#list fieldList as field>
+        <th>${field.nameCn}</th>
+        </#list>
+      <th>操作</th>
       </tr>
       </thead>
 
       <tbody>
-      <tr v-for="chapter in chapters">
-        <td>{{chapter.id}}</td>
-        <td>{{chapter.name}}</td>
-        <td>{{chapter.courseId}}</td>
-        <td>
-          <div class="hidden-sm hidden-xs btn-group">
-            <button @click="edit(chapter)" class="btn btn-xs btn-info">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
+      <tr v-for="${domain} in ${domain}s">
+        <#list fieldList as field>
+        <td>{{${domain}.${field.nameHump}}}</td>
+        </#list>
+      <td>
+        <div class="hidden-sm hidden-xs btn-group">
+          <button @click="edit(${domain})" class="btn btn-xs btn-info">
+            <i class="ace-icon fa fa-pencil bigger-120"></i>
+          </button>
+
+          <button @click="del(${domain}.id)" class="btn btn-xs btn-danger">
+            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+          </button>
+
+        </div>
+        <!--          小屏幕隐藏按钮-->
+        <div class="hidden-md hidden-lg">
+          <div class="inline pos-rel">
+            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+              <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
             </button>
 
-            <button @click="del(chapter.id)" class="btn btn-xs btn-danger">
-              <i class="ace-icon fa fa-trash-o bigger-120"></i>
-            </button>
+            <ul
+              class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 
-          </div>
-<!--          小屏幕隐藏按钮-->
-          <div class="hidden-md hidden-lg">
-            <div class="inline pos-rel">
-              <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-              </button>
-
-              <ul
-                class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-
-                <li>
-                  <a href="#" @click="edit(chapter)"   class="tooltip-success" data-rel="tooltip" title="Edit">
+              <li>
+                <a href="#" @click="edit(${domain})" class="tooltip-success" data-rel="tooltip" title="Edit">
 																			<span class="green">
 																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																			</span>
-                  </a>
-                </li>
+                </a>
+              </li>
 
-                <li>
-                  <a href="#"  @click="del(chapter.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
+              <li>
+                <a href="#" @click="del(${domain}.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
 																			<span class="red">
 																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																			</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
+                </a>
+              </li>
+            </ul>
           </div>
-        </td>
+        </div>
+      </td>
       </tr>
 
       </tbody>
@@ -84,23 +83,19 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
+              <#list fieldList as field>
               <div class="form-group">
-                <label class="col-sm-2 control-label">名称</label>
+                <label class="col-sm-2 control-label">${field.nameCn}</label>
                 <div class="col-sm-10">
-                  <input v-model="chapter.name"   class="form-control"  placeholder="名称">
+                  <input v-model="${domain}.${field.nameHump}" class="form-control">
                 </div>
               </div>
-              <div class="form-group">
-                <label  class="col-sm-2 control-label">课程ID</label>
-                <div class="col-sm-10">
-                  <input  v-model="chapter.courseId"  class="form-control"  placeholder="课程ID">
-                </div>
-              </div>
+            </#list>
             </form>
           </div>
           <div class="modal-footer">
-<!--            data-dismiss="modal" 关闭css名称为modal的选择器
-                data-toggle="modal" 开启css名称为modal的选择器 -->
+            <!--            data-dismiss="modal" 关闭css名称为modal的选择器
+                            data-toggle="modal" 开启css名称为modal的选择器 -->
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             <button @click="save()" type="button" class="btn btn-primary">保存</button>
           </div>
@@ -110,22 +105,21 @@
   </div>
 
 </template>
-
 <script>
     import Pagination from "../../components/pagination";
 
     export default {
-        name: 'chapter',
+        name: '${domain}',
         components: {Pagination},
         data: function () {
             return {
-                //chapter绑定表单数据
-                chapter: {},
-                chapters: []
+                //${domain}绑定表单数据
+                ${domain}: {},
+                ${domain}s: []
             }
         },
         mounted: function () {
-            // this.$parent.activeSidebar("business-chapter-sidebar")
+            // this.$parent.activeSidebar("${module}-${domain}-sidebar")
             let _this = this;
             _this.list(1);
         },
@@ -135,9 +129,9 @@
                 Confirm.show("删掉可就没了",function () {
                     //删除方法
                     Loading.show()
-                    _this.$ajax.delete(process.env.VUE_APP_SERVER+"/business/admin/chapter/delete/"+id).then((response) => {
+                    _this.$ajax.delete(process.env.VUE_APP_SERVER+"/${module}/admin/${domain}/delete/"+id).then((response) => {
                         Loading.hide()
-                        console.log("删除大章列表:", response);
+                        console.log("删除${tableNameCn}列表:", response);
                         let resp = response.data;
                         if(resp.success){
                             _this.list(1);
@@ -149,38 +143,34 @@
 
 
             },
-            edit(chapter){
+            edit(${domain}){
                 let _this = this;
-                _this.chapter = $.extend({},chapter);
+                _this.${domain} = $.extend({},${domain});
                 $("#form-modal").modal("show")
             },
             list(page) {
                 let _this = this;
                 Loading.show();
                 //得到数据
-                _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/chapter/list", {
+                _this.$ajax.post(process.env.VUE_APP_SERVER+"/${module}/admin/${domain}/list", {
                     page: page,
                     size: _this.$refs.pagination.size,
                 }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
-                    _this.chapters = resp.content.list;
+                    _this.${domain}s = resp.content.list;
                     _this.$refs.pagination.render(page, resp.content.total)
                 })
             },
             save(){
                 let _this = this;
 
-                if(!Validator.require(_this.chapter.name,"名称") ||
-                    !Validator.require(_this.chapter.courseId,"课程ID") ||
-                    !Validator.length(_this.chapter.courseId,"课程ID",1,8) ){
-                    return ;
-                }
+                <#--保存校验-->
 
 
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/chapter/save",
-                _this.chapter).then((response) => {
+                _this.$ajax.post(process.env.VUE_APP_SERVER+"/${module}/admin/${domain}/save",
+                _this.${domain}).then((response) => {
                     Loading.hide();
                     let resp = response.data; // 返回的是 ResponseDto 数据
                     if(resp.success){
@@ -194,7 +184,7 @@
             },
             add(){
                 let _this = this;
-                _this.chapter = {},
+                _this.${domain} = {},
                 $("#form-modal").modal("show");
             }
         }

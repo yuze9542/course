@@ -1,0 +1,265 @@
+<template>
+  <div>
+
+    <pagination ref="pagination" v-bind:list="list"></pagination>
+    <p></p>
+    <table id="simple-table" class="table  table-bordered table-hover">
+      <thead>
+      <tr>
+                <th>id</th>
+        <th>标题</th>
+        <th>课程</th>
+        <th>大章</th>
+        <th>视频</th>
+        <th>时长</th>
+        <th>收费</th>
+        <th>顺序</th>
+        <th>创建时间</th>
+        <th>修改时间</th>
+        <th>vod</th>
+      <th>操作</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr v-for="section in sections">
+        <td>{{section.id}}</td>
+        <td>{{section.title}}</td>
+        <td>{{section.courseId}}</td>
+        <td>{{section.chapterId}}</td>
+        <td>{{section.video}}</td>
+        <td>{{section.time}}</td>
+        <td>{{section.charge}}</td>
+        <td>{{section.sort}}</td>
+        <td>{{section.createdAt}}</td>
+        <td>{{section.updatedAt}}</td>
+        <td>{{section.vod}}</td>
+      <td>
+        <div class="hidden-sm hidden-xs btn-group">
+          <button @click="edit(section)" class="btn btn-xs btn-info">
+            <i class="ace-icon fa fa-pencil bigger-120"></i>
+          </button>
+
+          <button @click="del(section.id)" class="btn btn-xs btn-danger">
+            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+          </button>
+
+        </div>
+        <!--          小屏幕隐藏按钮-->
+        <div class="hidden-md hidden-lg">
+          <div class="inline pos-rel">
+            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+              <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+            </button>
+
+            <ul
+              class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+
+              <li>
+                <a href="#" @click="edit(section)" class="tooltip-success" data-rel="tooltip" title="Edit">
+																			<span class="green">
+																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																			</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" @click="del(section.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
+																			<span class="red">
+																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																			</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </td>
+      </tr>
+
+      </tbody>
+    </table>
+    <p>
+      <button @click="add()" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-edit red3"></i>
+        新增
+      </button>
+      &nbsp;
+      <button @click="list(1)" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-refresh red3"></i>
+        刷新
+      </button>
+    </p>
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">表单</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">id</label>
+                <div class="col-sm-10">
+                  <input v-model="section.id" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-10">
+                  <input v-model="section.title" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">课程</label>
+                <div class="col-sm-10">
+                  <input v-model="section.courseId" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">大章</label>
+                <div class="col-sm-10">
+                  <input v-model="section.chapterId" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">视频</label>
+                <div class="col-sm-10">
+                  <input v-model="section.video" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">时长</label>
+                <div class="col-sm-10">
+                  <input v-model="section.time" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">收费</label>
+                <div class="col-sm-10">
+                  <input v-model="section.charge" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">顺序</label>
+                <div class="col-sm-10">
+                  <input v-model="section.sort" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">创建时间</label>
+                <div class="col-sm-10">
+                  <input v-model="section.createdAt" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">修改时间</label>
+                <div class="col-sm-10">
+                  <input v-model="section.updatedAt" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">vod</label>
+                <div class="col-sm-10">
+                  <input v-model="section.vod" class="form-control">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <!--            data-dismiss="modal" 关闭css名称为modal的选择器
+                            data-toggle="modal" 开启css名称为modal的选择器 -->
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button @click="save()" type="button" class="btn btn-primary">保存</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+
+</template>
+<script>
+    import Pagination from "../../components/pagination";
+
+    export default {
+        name: 'section',
+        components: {Pagination},
+        data: function () {
+            return {
+                //section绑定表单数据
+                section: {},
+                sections: []
+            }
+        },
+        mounted: function () {
+            // this.$parent.activeSidebar("business-section-sidebar")
+            let _this = this;
+            _this.list(1);
+        },
+        methods: {
+            del(id){
+                let _this = this;
+                Confirm.show("删掉可就没了",function () {
+                    //删除方法
+                    Loading.show()
+                    _this.$ajax.delete(process.env.VUE_APP_SERVER+"/business/admin/section/delete/"+id).then((response) => {
+                        Loading.hide()
+                        console.log("删除小节列表:", response);
+                        let resp = response.data;
+                        if(resp.success){
+                            _this.list(1);
+                            Toast.success("删除成功")
+                        }
+                    })
+                })
+
+
+
+            },
+            edit(section){
+                let _this = this;
+                _this.section = $.extend({},section);
+                $("#form-modal").modal("show")
+            },
+            list(page) {
+                let _this = this;
+                Loading.show();
+                //得到数据
+                _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/section/list", {
+                    page: page,
+                    size: _this.$refs.pagination.size,
+                }).then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.sections = resp.content.list;
+                    _this.$refs.pagination.render(page, resp.content.total)
+                })
+            },
+            save(){
+                let _this = this;
+
+
+
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/section/save",
+                _this.section).then((response) => {
+                    Loading.hide();
+                    let resp = response.data; // 返回的是 ResponseDto 数据
+                    if(resp.success){
+                        $("#form-modal").modal("hide");
+                        _this.list(1);
+                        Toast.success("保存成功")
+                    }else {
+                        Toast.warning(resp.message)
+                    }
+                })
+            },
+            add(){
+                let _this = this;
+                _this.section = {},
+                $("#form-modal").modal("show");
+            }
+        }
+    }
+</script>
