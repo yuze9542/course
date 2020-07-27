@@ -139,7 +139,7 @@
                         console.log("删除大章列表:", response);
                         let resp = response.data;
                         if(resp.success){
-                            this.list(1);
+                            _this.list(1);
                             Toast.success("删除成功")
                         }
                     })
@@ -183,11 +183,13 @@
                 _this.chapter).then((response) => {
                     Loading.hide();
                     console.log("保存大章列表:", response);
-                    let resp = response.data;
+                    let resp = response.data; // 返回的是 ResponseDto 数据
                     if(resp.success){
                         $("#form-modal").modal("hide");
                         _this.list(1);
                         Toast.success("保存成功")
+                    }else {
+                        Toast.warning(resp.message)
                     }
                 })
             },
