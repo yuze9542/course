@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
 
 public class FreeMarkerUtil {
@@ -24,10 +25,10 @@ public class FreeMarkerUtil {
 
     }
 
-    public static void generator(String fileName) throws IOException, TemplateException {
+    public static void generator(String fileName, Map<String,Object> map) throws IOException, TemplateException {
         FileWriter fw = new FileWriter(fileName);//生成什么文件
         BufferedWriter bw = new BufferedWriter(fw);//   //放到buffer
-        temp.process(null, bw); //生成中...
+        temp.process(map, bw); //map是放变量的地方 生成中...
         bw.flush();
         fw.close();
     }
