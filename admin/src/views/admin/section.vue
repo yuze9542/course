@@ -6,7 +6,7 @@
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
       <tr>
-                <th>id</th>
+        <th>id</th>
         <th>标题</th>
         <th>课程</th>
         <th>大章</th>
@@ -14,7 +14,6 @@
         <th>时长</th>
         <th>收费</th>
         <th>顺序</th>
-        <th>创建时间</th>
         <th>修改时间</th>
         <th>vod</th>
       <th>操作</th>
@@ -29,9 +28,9 @@
         <td>{{section.chapterId}}</td>
         <td>{{section.video}}</td>
         <td>{{section.time}}</td>
-        <td>{{section.charge}}</td>
+<!--        <td>{{section.charge}}</td>-->
+        <td>{{SECTION_CHARGE | optionKV(section.charge)}}</td>
         <td>{{section.sort}}</td>
-        <td>{{section.createdAt}}</td>
         <td>{{section.updatedAt}}</td>
         <td>{{section.vod}}</td>
       <td>
@@ -65,9 +64,9 @@
 
               <li>
                 <a href="#" @click="del(section.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
-																			<span class="red">
-																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																			</span>
+                    <span class="red">
+                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </span>
                 </a>
               </li>
             </ul>
@@ -99,12 +98,6 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">id</label>
-                <div class="col-sm-10">
-                  <input v-model="section.id" class="form-control">
-                </div>
-              </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">标题</label>
                 <div class="col-sm-10">
@@ -138,25 +131,16 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">收费</label>
                 <div class="col-sm-10">
-                  <input v-model="section.charge" class="form-control">
+                  <select v-model="section.charge"  class="form-control">
+                    <option v-for="o in SECTION_CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                  </select>
+<!--                  <input v-model="section.charge" class="form-control">-->
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">顺序</label>
                 <div class="col-sm-10">
                   <input v-model="section.sort" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">创建时间</label>
-                <div class="col-sm-10">
-                  <input v-model="section.createdAt" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">修改时间</label>
-                <div class="col-sm-10">
-                  <input v-model="section.updatedAt" class="form-control">
                 </div>
               </div>
               <div class="form-group">
@@ -189,7 +173,8 @@
             return {
                 //section绑定表单数据
                 section: {},
-                sections: []
+                sections: [],
+                SECTION_CHARGE: SECTION_CHARGE,
             }
         },
         mounted: function () {
@@ -239,6 +224,14 @@
             save(){
                 let _this = this;
 
+                // 保存校验
+                if (1 != 1
+                    || !Validator.require(_this.section.title, "标题")
+                    || !Validator.length(_this.section.title, "标题", 1, 50)
+                    || !Validator.length(_this.section.video, "视频", 1, 200)
+                ) {
+                    return;
+                }
 
 
                 Loading.show();

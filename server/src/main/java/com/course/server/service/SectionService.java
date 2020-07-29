@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,6 +29,7 @@ public class SectionService {
     public void list( PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         SectionExample sectionExample = new SectionExample();
+        sectionExample.setOrderByClause("sort asc");
         List<Section> sectionList = sectionMapper.selectByExample(sectionExample);
         PageInfo<Section> pageInfo = new PageInfo<>(sectionList);//查询结果传给PageInfo
         pageDto.setTotal(pageInfo.getTotal());
@@ -44,12 +46,6 @@ public class SectionService {
     }
 
 
-//    public void save(SectionDto sectionDto){
-//        Section section = new Section();
-//        sectionDto.setId(UuidUtil.getShortUuid());
-//        BeanUtils.copyProperties(sectionDto,section);
-//        sectionMapper.insert(section);
-//    }
 
      /**
      * sectionDto看存不存在id 存在则修改 不存在就新建
@@ -68,11 +64,16 @@ public class SectionService {
     }
 
     private void insert(Section section){
+        Date now = new Date();
+        section.setCreatedAt(now);
+        section.setUpdatedAt(now);
         section.setId(UuidUtil.getShortUuid());
+
         sectionMapper.insert(section);
     }
 
     private void update(Section section){
+        section.setUpdatedAt(new Date());
         sectionMapper.updateByPrimaryKey(section);
     }
 
