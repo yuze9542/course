@@ -20,9 +20,9 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/courseimooc"
-                        userId="root"
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://112.124.22.13:3306/courseimooc"
+                        userId="yu"
                         password="root">
         </jdbcConnection>
 
@@ -42,8 +42,8 @@
 <!--        <table tableName="NewTable" domainObjectName="NewTable"/>-->
 
 <!--        <table tableName="chapter" domainObjectName="Chapter"/>-->
-        <table tableName="section" domainObjectName="Section"/>
-<!--        <table tableName="course" domainObjectName="Course"/>-->
+<!--        <table tableName="section" domainObjectName="Section"/>-->
+        <table tableName="course" domainObjectName="Course"/>
 <!--        <table tableName="course_content" domainObjectName="CourseContent"/>-->
 <!--        <table tableName="course_content_file" domainObjectName="CourseContentFile"/>-->
 <!--        <table tableName="teacher" domainObjectName="Teacher"/>-->

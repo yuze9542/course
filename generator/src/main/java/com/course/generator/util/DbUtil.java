@@ -2,6 +2,8 @@ package com.course.generator.util;
 
 //import com.course.generator.enums.EnumGenerator;
 
+import com.course.generator.enums.EnumGenerator;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +15,9 @@ public class DbUtil {
     public static Connection getConnection() {
         Connection conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/courseimooc";
-            String user = "root";
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String url = "jdbc:mysql://112.124.22.13:3306/courseimooc";
+            String user = "yu";
             String pass = "root";
             conn = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException e) {
@@ -86,18 +88,18 @@ public class DbUtil {
                 } else {
                     field.setLength(0);
                 }
-//                if (comment.contains("枚举")) {
-//                    field.setEnums(true);
-//
-//                    // 以课程等级为例：从注释中的“枚举[CourseLevelEnum]”，得到COURSE_LEVEL
-//                    int start = comment.indexOf("[");
-//                    int end = comment.indexOf("]");
-//                    String enumsName = comment.substring(start + 1, end);
-//                    String enumsConst = EnumGenerator.toUnderline(enumsName);
-//                    field.setEnumsConst(enumsConst);
-//                } else {
-//                    field.setEnums(false);
-//                }
+                if (comment.contains("枚举")) {
+                    field.setEnums(true);
+
+                    // 以课程等级为例：从注释中的“枚举[CourseLevelEnum]”，得到COURSE_LEVEL
+                    int start = comment.indexOf("[");
+                    int end = comment.indexOf("]");
+                    String enumsName = comment.substring(start + 1, end);
+                    String enumsConst = EnumGenerator.toUnderline(enumsName);
+                    field.setEnumsConst(enumsConst);
+                } else {
+                    field.setEnums(false);
+                }
                 fieldList.add(field);
             }
         }

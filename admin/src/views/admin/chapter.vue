@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    <h3>{{course.name}}</h3>
     <pagination ref="pagination" v-bind:list="list"></pagination>
     <p></p>
     <table id="simple-table" class="table  table-bordered table-hover">
@@ -64,6 +64,12 @@
       </tbody>
     </table>
     <p>
+<!--      相当于a标签-->
+      <router-link to="/business/course" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-arrow-left red3"></i>
+        返回课程
+      </router-link>
+
       <button @click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit red3"></i>
         新增
@@ -121,13 +127,20 @@
             return {
                 //chapter绑定表单数据
                 chapter: {},
-                chapters: []
+                chapters: [],
+                course: {}
             }
         },
         mounted: function () {
             // this.$parent.activeSidebar("business-chapter-sidebar")
             let _this = this;
+            let course = SessionStorage.get("course") ||  {} // 加{} 防止course为空报错
+            if(Tool.isEmpty(course)){
+                _this.$router.push("./welcome")
+            }
+            _this.course = course
             _this.list(1);
+
         },
         methods: {
             del(id){
