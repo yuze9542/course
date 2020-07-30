@@ -18,7 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
+<#list typeSet as type>
+    <#if type=='Date'>
+        import java.util.Date;
+    </#if>
+</#list>
 import java.util.List;
 
 @Service
@@ -37,15 +41,9 @@ public class ${Domain}Service {
         List<${Domain}> ${domain}List = ${domain}Mapper.selectByExample(${domain}Example);
         PageInfo<${Domain}> pageInfo = new PageInfo<>(${domain}List);//查询结果传给PageInfo
         pageDto.setTotal(pageInfo.getTotal());
-        List<${Domain}Dto> ${domain}DtoList = new ArrayList<${Domain}Dto>();
-        for (int i = 0, l = ${domain}List.size();i<l; i++) {
-            ${Domain} ${domain} = ${domain}List.get(i);
-            ${Domain}Dto ${domain}Dto = new ${Domain}Dto();
-            BeanUtils.copyProperties(${domain},${domain}Dto);
-            ${domain}DtoList.add(${domain}Dto);
-        }
+        List<${Domain}Dto> ${domain}DtoList = CopyUtil.copyList(${domain}List, ${Domain}Dto.class);
         pageDto.setList(${domain}DtoList);
-//        return pageDto;
+
 
     }
 
