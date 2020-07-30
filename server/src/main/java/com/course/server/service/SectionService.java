@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -56,7 +57,8 @@ public class SectionService {
      * 先复制一个不能动的    section
      * @param sectionDto
      */
-    public void save(SectionDto sectionDto){
+     @Transactional //事物
+    public void save(SectionDto sectionDto)  {
 
         Section section = CopyUtil.copy(sectionDto,Section.class);
         if(StringUtils.isEmpty(sectionDto.getId())){
@@ -64,6 +66,7 @@ public class SectionService {
         }else{
             this.update(section);
         }
+
         courseService.updateTime(sectionDto.getCourseId());
 
     }
