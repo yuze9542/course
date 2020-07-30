@@ -1,10 +1,13 @@
 package com.course.server.service;
 
 import com.course.server.domain.Course;
+import com.course.server.domain.CourseContent;
 import com.course.server.domain.CourseExample;
+import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.SectionDto;
+import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.my.MyCourseMapper;
 import com.course.server.util.CopyUtil;
@@ -15,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +34,10 @@ public class CourseService {
     private CourseMapper courseMapper;
     @Resource
     private MyCourseMapper myCourseMapper;
+    @Resource
+    private CourseCategoryService courseCategoryService;
+    @Resource
+    private CourseContentMapper courseContentMapper;
 
     public void list( PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -43,14 +51,12 @@ public class CourseService {
 //        return pageDto;
 
     }
-
-
-
      /**
      * courseDto看存不存在id 存在则修改 不存在就新建
      * 先复制一个不能动的    course
      * @param courseDto
      */
+    @Transactional
     public void save(CourseDto courseDto){
 
         Course course = CopyUtil.copy(courseDto,Course.class);
@@ -59,7 +65,8 @@ public class CourseService {
         }else{
             this.update(course);
         }
-
+        //批量保存课程分类
+        courseCategoryService.saveBatch(courseDto.getId(),courseDto.getCategorys());
     }
 
     private void insert(Course course){
@@ -83,5 +90,33 @@ public class CourseService {
         Log.info("更新课程时长",courseId);
         myCourseMapper.updateTime(courseId);
     }
+
+    /**
+     * 查找课程内容
+     * @param id
+     * @return 课程内容Dto的值
+     */
+    public CourseContentDto findContent(String id){
+        CourseContent courseContent = courseContentMapper.selectByPrimaryKey(id);
+        if(courseContent == null){
+            return null;
+        }
+        return CopyUtil.copy(courseContent,CourseContentDto.class);
+    }
+
+    public int saveContent(CourseContentDto courseContentDto){
+        CourseContent courseContent =  CopyUtil.copy(courseContentDto,CourseContent.class);
+        //直接更新 更新不到再插入
+        int i = courseContentMapper.updateByPrimaryKeyWithBLOBs(courseContent);
+        if(i==0){
+            i = courseContentMapper.insert(courseContent);
+        }
+        return i;
+
+
+    }
+
+
+
 }
 

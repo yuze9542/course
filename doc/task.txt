@@ -7,6 +7,7 @@
     生成热部署DevTools 引入jar包 spring-boot-devtools
 
 
+
 7.25:
     写了前端页面:
         axios ==> 跨域会有问题:
@@ -32,4 +33,9 @@
     代码生成器: freemarker 先生成jar包 然后有一个util类生成的
 
 7.28:
+
+7.30:
+    前段传递参数 需要localsession
+    前端传递值 需要后端相残名字的参数
+    富文本编辑器 所见即所得: summernote
 
