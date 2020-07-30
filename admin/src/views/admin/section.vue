@@ -1,6 +1,8 @@
 <template>
   <div>
 
+    <h3>{{chapter.name}}</h3>
+    <hr/>
     <pagination ref="pagination" v-bind:list="list"></pagination>
     <p></p>
     <table id="simple-table" class="table  table-bordered table-hover">
@@ -107,13 +109,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">课程</label>
                 <div class="col-sm-10">
-                  <input v-model="section.courseId" class="form-control">
+                  <p class="form-control-static">{{course.id}}</p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">大章</label>
                 <div class="col-sm-10">
-                  <input v-model="section.chapterId" class="form-control">
+                  <p class="form-control-static">{{chapter.id}}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -175,11 +177,23 @@
                 section: {},
                 sections: [],
                 SECTION_CHARGE: SECTION_CHARGE,
+                course:{},
+                chapter:{},
             }
         },
         mounted: function () {
             // this.$parent.activeSidebar("business-section-sidebar")
             let _this = this;
+
+            let course = SessionStorage.get("course") ||  {} // 加{} 防止course为空报错
+            let chapter = SessionStorage.get("chapter") ||  {} // 加{} 防止chapter为空报错
+            console.log("course",course)
+            console.log("chapter",chapter)
+            if(Tool.isEmpty(course) || Tool.isEmpty(chapter)){
+                _this.$router.push("./welcome")
+            }
+            _this.course = course
+            _this.chapter = chapter
             _this.list(1);
         },
         methods: {
@@ -214,6 +228,8 @@
                 _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/section/list", {
                     page: page,
                     size: _this.$refs.pagination.size,
+                    courseId: _this.course.id,
+                    chapterId: _this.chapter.id,
                 }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
@@ -233,6 +249,8 @@
                     return;
                 }
 
+                _this.section.courseId = _this.course.id;
+                _this.section.chapterId = _this.chapter.id;
 
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/section/save",

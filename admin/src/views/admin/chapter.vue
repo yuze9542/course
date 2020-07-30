@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>{{course.name}}</h3>
+    <hr/>
     <pagination ref="pagination" v-bind:list="list"></pagination>
     <p></p>
     <table id="simple-table" class="table  table-bordered table-hover">
@@ -21,10 +22,12 @@
         <td>{{chapter.courseId}}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
+            <button @click="toSection(chapter)" class="btn btn-xs btn-info">
+              小节
+            </button>
             <button @click="edit(chapter)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
-
             <button @click="del(chapter.id)" class="btn btn-xs btn-danger">
               <i class="ace-icon fa fa-trash-o bigger-120"></i>
             </button>
@@ -99,7 +102,7 @@
               <div class="form-group">
                 <label  class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
-                  <input  v-model="chapter.courseId"  class="form-control"  placeholder="课程ID">
+                  <p class="form-control-static">{{course.name}}</p>
                 </div>
               </div>
             </form>
@@ -143,6 +146,11 @@
 
         },
         methods: {
+            toSection(chapter){
+                let _this = this;
+                SessionStorage.set("chapter",chapter);
+                _this.$router.push("/business/section");
+            },
             del(id){
                 let _this = this;
                 Confirm.show("删掉可就没了",function () {
@@ -174,6 +182,7 @@
                 _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/chapter/list", {
                     page: page,
                     size: _this.$refs.pagination.size,
+                    courseId: _this.course.id,
                 }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
@@ -183,9 +192,8 @@
             },
             save(){
                 let _this = this;
-
+                _this.chapter.courseId = _this.course.id;
                 if(!Validator.require(_this.chapter.name,"名称") ||
-                    !Validator.require(_this.chapter.courseId,"课程ID") ||
                     !Validator.length(_this.chapter.courseId,"课程ID",1,8) ){
                     return ;
                 }

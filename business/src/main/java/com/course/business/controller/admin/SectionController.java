@@ -3,6 +3,7 @@ package com.course.business.controller.admin;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.exception.ValidatorException;
 import com.course.server.service.SectionService;
 import com.course.server.util.ValidatorUtil;
@@ -23,10 +24,12 @@ public class SectionController {
     SectionService sectionService ;
 
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody SectionPageDto sectionPageDto){
         ResponseDto responseDto = new ResponseDto();
-       sectionService.list(pageDto);
-       responseDto.setContent(pageDto);
+        ValidatorUtil.require(sectionPageDto.getChapterId(), "大章ID");
+        ValidatorUtil.require(sectionPageDto.getCourseId(), "课程ID");
+       sectionService.list(sectionPageDto);
+       responseDto.setContent(sectionPageDto);
        return responseDto;
     }
 
@@ -34,9 +37,9 @@ public class SectionController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody SectionDto sectionDto){
         // 保存校验
-                ValidatorUtil.require(sectionDto.getTitle(), "标题");
-                ValidatorUtil.length(sectionDto.getTitle(), "标题", 1, 50);
-                ValidatorUtil.length(sectionDto.getVideo(), "视频", 1, 200);
+        ValidatorUtil.require(sectionDto.getTitle(), "标题");
+        ValidatorUtil.length(sectionDto.getTitle(), "标题", 1, 50);
+        ValidatorUtil.length(sectionDto.getVideo(), "视频", 1, 200);
 
         ResponseDto responseDto = new ResponseDto();
         responseDto.setContent(sectionDto);

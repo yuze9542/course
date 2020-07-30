@@ -4,6 +4,7 @@ import com.course.server.domain.Section;
 import com.course.server.domain.SectionExample;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.mapper.SectionMapper;
 import com.course.server.util.CopyUtil;
 import com.course.server.util.UuidUtil;
@@ -26,21 +27,22 @@ public class SectionService {
     @Resource
     private SectionMapper sectionMapper;
 
-    public void list( PageDto pageDto){
-        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+    public void list( SectionPageDto sectionPageDto){
+        PageHelper.startPage(sectionPageDto.getPage(),sectionPageDto.getSize());
         SectionExample sectionExample = new SectionExample();
+        SectionExample.Criteria criteria = sectionExample.createCriteria(); //criteria类似于where条件
+        if(!StringUtils.isEmpty(sectionPageDto.getCourseId())){
+            criteria.andCourseIdEqualTo(sectionPageDto.getCourseId());
+        }
+        if(!StringUtils.isEmpty(sectionPageDto.getChapterId())){
+            criteria.andChapterIdEqualTo(sectionPageDto.getChapterId());
+        }
         sectionExample.setOrderByClause("sort asc");
         List<Section> sectionList = sectionMapper.selectByExample(sectionExample);
         PageInfo<Section> pageInfo = new PageInfo<>(sectionList);//查询结果传给PageInfo
-        pageDto.setTotal(pageInfo.getTotal());
-        List<SectionDto> sectionDtoList = new ArrayList<SectionDto>();
-        for (int i = 0, l = sectionList.size();i<l; i++) {
-            Section section = sectionList.get(i);
-            SectionDto sectionDto = new SectionDto();
-            BeanUtils.copyProperties(section,sectionDto);
-            sectionDtoList.add(sectionDto);
-        }
-        pageDto.setList(sectionDtoList);
+        sectionPageDto.setTotal(pageInfo.getTotal());
+        List<SectionDto> sectionDtoList =  CopyUtil.copyList(sectionList,SectionDto.class);
+        sectionPageDto.setList(sectionDtoList);
 //        return pageDto;
 
     }

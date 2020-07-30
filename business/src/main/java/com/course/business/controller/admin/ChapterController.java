@@ -1,6 +1,8 @@
 package com.course.business.controller.admin;
 
+import com.course.server.domain.Chapter;
 import com.course.server.dto.ChapterDto;
+import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.exception.ValidatorException;
@@ -23,10 +25,11 @@ public class ChapterController {
     ChapterService chapterService ;
 
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody ChapterPageDto chapterPageDto){
         ResponseDto responseDto = new ResponseDto();
-       chapterService.list(pageDto);
-       responseDto.setContent(pageDto);
+        ValidatorUtil.require(chapterPageDto.getCourseId(),"课程ID");
+       chapterService.list(chapterPageDto);
+       responseDto.setContent(chapterPageDto);
        //pageDto四个属性 前两个是前端传递进来的 传到service包chapterService的list函数中
        return responseDto;
     }
