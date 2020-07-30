@@ -4,7 +4,9 @@ import com.course.server.domain.Course;
 import com.course.server.domain.CourseExample;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.SectionDto;
 import com.course.server.mapper.CourseMapper;
+import com.course.server.mapper.my.MyCourseMapper;
 import com.course.server.util.CopyUtil;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -23,8 +25,11 @@ import java.util.List;
 
 @Service
 public class CourseService {
+    private static final Logger Log = LoggerFactory.getLogger((CourseService.class));
     @Resource
     private CourseMapper courseMapper;
+    @Resource
+    private MyCourseMapper myCourseMapper;
 
     public void list( PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -33,13 +38,7 @@ public class CourseService {
         List<Course> courseList = courseMapper.selectByExample(courseExample);
         PageInfo<Course> pageInfo = new PageInfo<>(courseList);//查询结果传给PageInfo
         pageDto.setTotal(pageInfo.getTotal());
-        List<CourseDto> courseDtoList = new ArrayList<CourseDto>();
-        for (int i = 0, l = courseList.size();i<l; i++) {
-            Course course = courseList.get(i);
-            CourseDto courseDto = new CourseDto();
-            BeanUtils.copyProperties(course,courseDto);
-            courseDtoList.add(courseDto);
-        }
+        List<CourseDto> courseDtoList =  CopyUtil.copyList(courseList, CourseDto.class);
         pageDto.setList(courseDtoList);
 //        return pageDto;
 
@@ -80,5 +79,9 @@ public class CourseService {
         courseMapper.deleteByPrimaryKey(id);
     }
 
+    public void updateTime(String courseId){
+        Log.info("更新课程时长",courseId);
+        myCourseMapper.updateTime(courseId);
+    }
 }
 

@@ -35,7 +35,7 @@
               <a href="#" class="blue">{{course.name}}</a>
             </h3>
             <p>{{course.summary}}</p>
-            <p>id:{{course.id}}</p>
+            <p>id:{{course.id}} 时长{{course.time}}</p>
             <p>
               <button v-on:click="edit(course)" class="btn btn-white btn-around btn-xs btn-info">
                 编辑
@@ -120,12 +120,7 @@
                               <input v-model="course.summary" class="form-control">
                             </div>
                           </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">时长</label>
-                            <div class="col-sm-10">
-                              <input v-model="course.time" class="form-control">
-                            </div>
-                          </div>
+
                           <div class="form-group">
                             <label class="col-sm-2 control-label">价格（元）</label>
                             <div class="col-sm-10">
