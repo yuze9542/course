@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 //如果返回的是json格式的数据 用RestController
 //如果返回的是页面 就是Controller
@@ -21,6 +22,14 @@ public class TeacherController {
     public static final String BUSINESS_NAME = "讲师";
     @Resource
     TeacherService teacherService ;
+
+    @PostMapping("/all")
+    public ResponseDto all(){
+        ResponseDto responseDto = new ResponseDto();
+        List<TeacherDto> teacherDto = teacherService.all();
+        responseDto.setContent(teacherDto);
+        return responseDto;
+    }
 
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto){
