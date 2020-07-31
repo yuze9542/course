@@ -13,43 +13,48 @@
     </p>
 
     <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
+    <div class="row">
+      <div v-for="teacher in teachers" class="col-md-3">
+        <!--        <div class="col-xs-12 col-sm-3 center">-->
+        <div>
+            <span class="profile-picture">
+              <img v-show="!teacher.image" class="editable img-responsive editable-click editable-empty"
+                   src="/static/image/讲师头像/头像3.jpg" v-bind:title="teacher.intro"/>
+              <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty"
+                   v-bind:src="teacher.image" v-bind:title="teacher.intro"/>
+            </span>
 
-    <table id="simple-table" class="table  table-bordered table-hover">
-      <thead>
-      <tr>
-                          <th>id</th>
-                <th>姓名</th>
-                <th>昵称</th>
-                <th>头像</th>
-                <th>职位</th>
-                <th>座右铭</th>
-                <th>简介</th>
-        <th>操作</th>
-      </tr>
-      </thead>
+          <div class="space-4"></div>
 
-      <tbody>
-      <tr v-for="teacher in teachers">
-                    <td>{{teacher.id}}</td>
-                    <td>{{teacher.name}}</td>
-                    <td>{{teacher.nickname}}</td>
-                    <td>{{teacher.image}}</td>
-                    <td>{{teacher.position}}</td>
-                    <td>{{teacher.motto}}</td>
-                    <td>{{teacher.intro}}</td>
-        <td>
-          <div class="hidden-sm hidden-xs btn-group">
-            <button v-on:click="edit(teacher)" class="btn btn-xs btn-info">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
-            </button>
-            <button v-on:click="del(teacher.id)" class="btn btn-xs btn-danger">
-              <i class="ace-icon fa fa-trash-o bigger-120"></i>
-            </button>
+          <div class="width-85 label label-info label-xlg arrowed-in arrowed-in-right">
+            <div class="inline position-relative">
+              <a href="javascript:;" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                <i class="ace-icon fa fa-circle light-green"></i>
+                &nbsp;&nbsp;
+                <span class="white">{{teacher.position}}</span>
+              </a>
+            </div>
           </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+
+        </div>
+
+        <div class="space-6"></div>
+        <a href="#" class="btn btn-link">
+          <i class="ace-icon fa fa-plus-circle bigger-120 green"></i>
+          {{teacher.name}} [{{teacher.nickname}}]
+        </a>
+        <div class="profile-contact-links align-center">
+
+          <button @click="edit(teacher)" class="btn btn-xs btn-info">
+            <i class="ace-icon fa fa-pencil bigger-120 "></i>
+          </button>&nbsp;
+          <button @click="del(teacher)" class="btn btn-xs btn-danger">
+            <i class="ace-icon fa fa-trash-o bigger-120 "></i>
+          </button>
+        </div>
+        <div class="hr hr16 dotted"></div>
+      </div>
+    </div>
 
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
@@ -60,42 +65,42 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">姓名</label>
-                            <div class="col-sm-10">
-                              <input v-model="teacher.name" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">昵称</label>
-                            <div class="col-sm-10">
-                              <input v-model="teacher.nickname" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">头像</label>
-                            <div class="col-sm-10">
-                              <input v-model="teacher.image" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">职位</label>
-                            <div class="col-sm-10">
-                              <input v-model="teacher.position" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">座右铭</label>
-                            <div class="col-sm-10">
-                              <input v-model="teacher.motto" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">简介</label>
-                            <div class="col-sm-10">
-                              <input v-model="teacher.intro" class="form-control">
-                            </div>
-                          </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">姓名</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.name" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">昵称</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.nickname" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">头像</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.image" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">职位</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.position" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">座右铭</label>
+                <div class="col-sm-10">
+                  <input v-model="teacher.motto" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">简介</label>
+                <div class="col-sm-10">
+                  <textarea v-model="teacher.intro" class="form-control" rows="5"></textarea>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
