@@ -137,7 +137,7 @@
         mounted: function () {
             this.$parent.activeSidebar("business-course-sidebar")
             let _this = this;
-            let course = SessionStorage.get("course") ||  {} // 加{} 防止course为空报错
+            let course = SessionStorage.get(SESSION_KEY_COURSE) ||  {} // 加{} 防止course为空报错
             if(Tool.isEmpty(course)){
                 _this.$router.push("./welcome")
             }
@@ -148,7 +148,7 @@
         methods: {
             toSection(chapter){
                 let _this = this;
-                SessionStorage.set("chapter",chapter);
+                SessionStorage.set(SESSION_KEY_CHAPTER,chapter);
                 _this.$router.push("/business/section");
             },
             del(id){

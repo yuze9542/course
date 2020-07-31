@@ -194,8 +194,8 @@
             this.$parent.activeSidebar("business-course-sidebar")
             let _this = this;
 
-            let course = SessionStorage.get("course") ||  {} // 加{} 防止course为空报错
-            let chapter = SessionStorage.get("chapter") ||  {} // 加{} 防止chapter为空报错
+            let course = SessionStorage.get(SESSION_KEY_COURSE) ||  {} // 加{} 防止course为空报错
+            let chapter = SessionStorage.get(SESSION_KEY_CHAPTER) ||  {} // 加{} 防止chapter为空报错
             console.log("course",course)
             console.log("chapter",chapter)
             if(Tool.isEmpty(course) || Tool.isEmpty(chapter)){
