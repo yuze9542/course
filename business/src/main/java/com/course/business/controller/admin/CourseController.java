@@ -8,6 +8,7 @@ import com.course.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import sun.rmi.runtime.Log;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -88,6 +89,21 @@ public class CourseController {
         ResponseDto responseDto = new ResponseDto();
         courseService.saveContent(courseContentDto);
 //        responseDto.setContent(courseContentDto); //因为是从前端获取来的就不传过去了
+        return responseDto;
+    }
+
+    /**
+     * 更新排序
+     * @param
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
+
+
+    @PostMapping("/sort")
+    public ResponseDto saveContent(@RequestBody SortDto sortDto) {
+        LOG.info("更新排序");
+        ResponseDto responseDto = new ResponseDto();
+        courseService.sort(sortDto);
         return responseDto;
     }
 }

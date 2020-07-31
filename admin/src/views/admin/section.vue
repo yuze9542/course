@@ -80,6 +80,15 @@
       </tbody>
     </table>
     <p>
+      <!--      相当于a标签-->
+      <router-link to="/business/course" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-arrow-left red3"></i>
+        返回课程
+      </router-link>
+      <router-link to="/business/chapter" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-arrow-left red3"></i>
+        返回大章
+      </router-link>
       <button @click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit red3"></i>
         新增
@@ -182,7 +191,7 @@
             }
         },
         mounted: function () {
-            // this.$parent.activeSidebar("business-section-sidebar")
+            this.$parent.activeSidebar("business-course-sidebar")
             let _this = this;
 
             let course = SessionStorage.get("course") ||  {} // 加{} 防止course为空报错

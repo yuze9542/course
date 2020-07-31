@@ -135,7 +135,7 @@
             }
         },
         mounted: function () {
-            // this.$parent.activeSidebar("business-chapter-sidebar")
+            this.$parent.activeSidebar("business-course-sidebar")
             let _this = this;
             let course = SessionStorage.get("course") ||  {} // 加{} 防止course为空报错
             if(Tool.isEmpty(course)){

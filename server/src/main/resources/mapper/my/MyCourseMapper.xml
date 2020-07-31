@@ -6,4 +6,22 @@
             (select sum(`time`) from `section` where course_id = #{courseId})
         where c.id = #{courseId}
     </update>
+    <update id="updateSort" parameterType="com.course.server.dto.SortDto">
+        update course set `sort` = #{newSort} where id=#{id}
+    </update>
+    <update id="moveSortsBackward" parameterType="com.course.server.dto.SortDto">
+
+        <![CDATA[
+#         更新所有sort小于新排序的值加一  old>new
+#             old :5 new: 3     5->3 3->4 4->5
+        update course set `sort`= (`sort`+1) where `sort` >= #{newSort} and `sort` <= #{oldSort} and id != #{id}
+        ]]>
+    </update>
+    <update id="moveSortForward" parameterType="com.course.server.dto.SortDto">
+         <![CDATA[
+#         更新所有sort小于新排序的值减一  old>new 情况时
+#             old :3 new: 5     3->5 5->4 4->3
+        update course set `sort`= (`sort`-1) where `sort` <= #{newSort} and `sort` >= #{oldSort} and id != #{id}
+        ]]>
+    </update>
 </mapper>
