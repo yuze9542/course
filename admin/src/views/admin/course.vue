@@ -34,6 +34,15 @@
             <h3 class="search-title">
               <a href="#" class="blue">{{course.name}}</a>
             </h3>
+            <div v-for="teacher in teachers.filter(t=>{return t.id===course.teacherId})" class="profile-activity clearfix">
+              <div>
+                <img v-show="!teacher.image" class="pull-left" src="/ace/assets/images/avatars/avatar5.png">
+                <img v-show="teacher.image" class="pull-left" v-bind:src="teacher.image">
+                <a class="user" href="#"> {{teacher.name}} </a>
+                <br>
+                {{teacher.position}}
+              </div>
+            </div>
             <p>{{course.summary}}</p>
             <p>id:{{course.id}} 时长{{course.time | formatSecond}}</p>
             <p>
@@ -85,7 +94,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">讲师</label>
                 <div class="col-sm-10">
-                  <select v-model="course.teacher" class="form-control">
+                  <select v-model="course.teacherId" class="form-control">
                     <option v-for="o in teachers" v-bind:value="o.id">{{o.name}}</option>
                   </select>
                 </div>
@@ -402,6 +411,8 @@
              */
             edit(course) {
                 let _this = this;
+
+                console.log("ssss",_this.teachers);
                 _this.course = $.extend({}, course);
                 _this.listCategory(course.id);
                 $("#form-modal").modal("show");
