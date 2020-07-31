@@ -44,7 +44,7 @@
               </div>
             </div>
             <p>{{course.summary}}</p>
-            <p>id:{{course.id}} 时长{{course.time | formatSecond}}</p>
+            <p>时长{{course.time | formatSecond}}</p>
             <p>
               <button v-on:click="edit(course)" class="btn btn-white btn-around btn-xs btn-info">
                 编辑
