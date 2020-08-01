@@ -78,10 +78,13 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">头像</label>
+                <label  class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-<!--                  v-model="teacher.image"  要去掉-->
-                  <input id="file-upload-input"  @change="uploadImage()" type="file"  class="form-control">
+                  <file
+                    :input-id="'image-upload'"
+                    :suffixes="['jpg','jpeg','png']"
+                    :text="'头像上传'"
+                    :after-upload="afterUpdate"></file>
                   <div class="row" v-show="teacher.image">
                     <div class="col-md-4">
                       <img :src="teacher.image" alt="" class="img-responsive">
@@ -121,8 +124,9 @@
 
 <script>
     import Pagination from "../../components/pagination";
+    import File from "../../components/uploadFile";
     export default {
-        components: {Pagination},
+        components: {File, Pagination},
         name: "business-teacher",
         data: function() {
             return {
@@ -139,6 +143,11 @@
 
         },
         methods: {
+            afterUpdate(resp){
+                let _this = this;
+                let image = resp.content;
+                _this.teacher.image = image;
+            },
             /**
              * 点击【新增】
              */
@@ -225,24 +234,7 @@
                     })
                 });
             },
-            /**
-             * 上传文件
-             */
-            uploadImage(){
-                let _this = this;
-                //window.FormData 需要键值对形式
-                let formData = new window.FormData;
-                console.log("ssss")
-                //key: file必须和后端Controller参数名保持一致
-                formData.append("file",document.querySelector("#file-upload-input").files[0]);
-                Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
-                    Loading.hide();
-                    let resp = response.data;
-                    let image = resp.content;
-                    _this.teacher.image = image;
-                })
-            }
+
         }
     }
 </script>
