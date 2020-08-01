@@ -41,4 +41,8 @@
 
 7.31:
     文件上传:
-      搭建文件模块
+      搭建文件模块: 最基本的:
+         先把input type=file  当这个input值发生改变时触发监听
+          uploadImage()函数 通过new window.FormData存储 然后把FormData转发给后端
+          FormData 是键值对  他的key名字需要和后端参数名字保持一致
+          后端拿到先保存到本地3

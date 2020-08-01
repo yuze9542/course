@@ -80,7 +80,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <input v-model="teacher.image" class="form-control">
+<!--                  v-model="teacher.image"  要去掉-->
+                  <input id="file-upload-input"  @change="uploadImage()" type="file"  class="form-control">
+                  <div class="row" v-show="teacher.image">
+                    <div class="col-md-4">
+                      <img :src="teacher.image" alt="" class="img-responsive">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
@@ -218,6 +224,24 @@
                         }
                     })
                 });
+            },
+            /**
+             * 上传文件
+             */
+            uploadImage(){
+                let _this = this;
+                //window.FormData 需要键值对形式
+                let formData = new window.FormData;
+                console.log("ssss")
+                //key: file必须和后端Controller参数名保持一致
+                formData.append("file",document.querySelector("#file-upload-input").files[0]);
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    let image = resp.content;
+                    _this.teacher.image = image;
+                })
             }
         }
     }
