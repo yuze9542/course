@@ -42,8 +42,7 @@
                 let file = _this.$refs.file.files[0]
 
                 let suffixs = _this.suffixes;
-                let fileName = file.name
-                ;
+                let fileName = file.name;
                 let  suffix = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length).toLowerCase();
                 let validateSuffix = false;
                 for (let i = 0; i < suffixs.length; i++) {
@@ -59,6 +58,7 @@
                 }
                 //key: file必须和后端Controller参数名保持一致
                 formData.append("file",file);
+                console.log("SSSSS",formData);
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
                     Loading.hide();
