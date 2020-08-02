@@ -2,6 +2,7 @@ package com.course.file.controller.admin;
 
 import com.course.server.dto.FileDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.enums.FileUseEnum;
 import com.course.server.service.FileService;
 import com.course.server.service.TestService;
 import com.course.server.util.UuidUtil;
@@ -36,17 +37,26 @@ public class UploadController {
 
     @PostMapping("/upload")
     //file 必须要和前端名字一致 formData的key一致
-    public ResponseDto upload(@RequestParam MultipartFile file) throws IOException {
+    public ResponseDto upload(@RequestParam MultipartFile file,String use) throws IOException {
 
         log.info("上传文件开始:");
         log.info("文件名: {}", file.getOriginalFilename());
         log.info("文件大小: {}",file.getSize());
 
         //保存文件到本地
+        FileUseEnum useEnum = FileUseEnum.getByCode(use);
         String filename = file.getOriginalFilename();
         String suffix = filename.substring(filename.indexOf(".")+1).toLowerCase(); //文件后缀
+
+        //如果不存在则创建
+        String dir = useEnum.name().toLowerCase();
+        File fullDir = new File(FILE_PATH+dir);
+        if(!fullDir.exists())
+            fullDir.mkdir();
+
         String key = UuidUtil.getShortUuid();
-        String path = "/teacher/"+key+"."+suffix;
+        //File.separator是产生斜杠的意思
+        String path = dir + File.separator + key + "." + suffix;
         String fullpath = FILE_PATH +path;
         File dest = new File(fullpath);//找到文件夹 需要提前创建好
         file.transferTo(dest);//将文件写到全路径
@@ -61,7 +71,8 @@ public class UploadController {
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(FILE_DOMAIN+path);
+        fileDto.setPath(FILE_DOMAIN+path);
+        responseDto.setContent(fileDto);
         return responseDto;
     }
 

@@ -84,6 +84,7 @@
                     :input-id="'image-upload'"
                     :suffixes="['jpg','jpeg','png']"
                     :text="'头像上传'"
+                    :use="FILE_USE.TEACHER.key"
                     :after-upload="afterUpdate"></file>
                   <div class="row" v-show="teacher.image">
                     <div class="col-md-4">
@@ -132,6 +133,7 @@
             return {
             teacher: {},
             teachers: [],
+            FILE_USE:FILE_USE
         }
         },
         mounted: function() {
@@ -145,7 +147,7 @@
         methods: {
             afterUpdate(resp){
                 let _this = this;
-                let image = resp.content;
+                let image = resp.content.path;
                 _this.teacher.image = image;
             },
             /**
