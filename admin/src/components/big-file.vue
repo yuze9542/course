@@ -1,0 +1,86 @@
+<template>
+  <div>
+    <input class="hidden" ref="file"  :id="inputId+'-input'"  @change="uploadFile()" type="file" >
+    <button type="button" @click="selectFile()" class="btn btn-white btn-default btn-round">
+      <i class="ace-icon fa fa-upload"></i>
+      {{text}}
+    </button>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: 'big-file',
+        props:{
+            inputId: {
+                default: "file-upload",
+            },
+            text: {
+                default: "大文件上传",
+            },
+            suffixes: {
+                default: "",
+            },
+            afterUpload:{
+                type: Function,
+                default: null
+            },
+            use:{
+                default:"",
+            }
+        },
+        methods:{
+            selectFile(){
+                let _this = this;
+                $("#"+_this.inputId+"-input").trigger("click");
+            },
+            /**
+             * 上传文件
+             */
+            uploadFile(){
+                let _this = this;
+                //window.FormData 需要键值对形式
+                let formData = new window.FormData;
+                // file === document.querySelector("#file-upload-input").files[0]
+                let file = _this.$refs.file.files[0]
+
+                let suffixs = _this.suffixes;
+                let fileName = file.name;
+                let  suffix = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length).toLowerCase();
+                let validateSuffix = false;
+                for (let i = 0; i < suffixs.length; i++) {
+                    if(suffixs[i].toLowerCase() === suffix){
+                        validateSuffix = true;
+                        break;
+                    }
+                }
+                if(!validateSuffix){
+                    Toast.warning("文件格式不支持 只支持"+ suffixs.join(","));
+                    $("#"+_this.inputId+"-input").val("");
+                    return;
+                }
+
+                //文件分片
+                let shareSize = 1 *1024*1024 ;  //以20MB为一个分片
+                let shardIndex = 0 ;  //分片索引
+                let start = shardIndex * shareSize; //当前分片起始位置
+                let end = Math.min(start + shareSize,file.size);//当前分片结束位置
+                let fileShard = file.slice(start,end);
+
+                //key: file必须和后端Controller参数名保持一致
+                formData.append("file",fileShard);
+                formData.append("use",_this.use);
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    console.log("上传文件成功: ",resp);
+                    _this.afterUpload(resp);
+                    $("#"+_this.inputId+"-input").val("");
+                })
+            }
+        }
+
+    }
+</script>
+

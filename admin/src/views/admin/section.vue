@@ -130,7 +130,18 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <input v-model="section.video" class="form-control">
+                  <big-file
+                    :input-id="'video-upload'"
+                    :suffixes="['mp4']"
+                    :text="'上传大视频'"
+                    :use="FILE_USE.COURSE.key"
+                    :after-upload="afterUpdate"></big-file>
+                  <div class="row" v-show="section.video">
+                    <div class="col-md-10">
+                      <video id="video" :src="section.video" alt="" controls="controls">
+                      </video>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
@@ -176,15 +187,18 @@
 </template>
 <script>
     import Pagination from "../../components/pagination";
+    import File from "../../components/uploadFile";
+    import BigFile from "../../components/big-file";
 
     export default {
         name: 'business-section',
-        components: {Pagination},
+        components: {Pagination,File,BigFile},
         data: function () {
             return {
                 //section绑定表单数据
                 section: {},
                 sections: [],
+                FILE_USE:FILE_USE,
                 SECTION_CHARGE: SECTION_CHARGE,
                 course:{},
                 chapter:{},
@@ -279,7 +293,27 @@
                 let _this = this;
                 _this.section = {},
                 $("#form-modal").modal("show");
+            },
+
+            afterUpdate(resp){
+                let _this = this;
+                let video = resp.content.path;
+                _this.section.video = video;
+                _this.getTime()
+            },
+            //获取时长
+            getTime(){
+                let _this =this;
+                let ele = $("#video");
+                _this.section.time = parseInt(ele.duration,10)
             }
         }
     }
 </script>
+<style scoped>
+  video{
+    width:100%;
+    height:auto;
+    margin: 5px;
+  }
+</style>
