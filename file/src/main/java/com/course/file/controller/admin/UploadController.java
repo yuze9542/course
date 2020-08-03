@@ -57,11 +57,12 @@ public class UploadController {
                 .append(key)
                 .append(".")
                 .append(suffix)
+                .toString(); // course\6sfSqfOwzmik4A4icMYuUe.mp4
+        String localPath = new StringBuffer(path)
                 .append(".")
                 .append(fileDto.getShardIndex())
-                .toString()
-                ; // course\6sfSqfOwzmik4A4icMYuUe.mp4
-        String fullpath = FILE_PATH +path;
+                .toString(); // course\6sfSqfOwzmik4A4icMYuUe.mp4.1
+        String fullpath = FILE_PATH +localPath;
         File dest = new File(fullpath);//找到文件夹 需要提前创建好
         shard.transferTo(dest);//将文件写到全路径
         log.info(dest.getAbsolutePath());
@@ -72,26 +73,29 @@ public class UploadController {
         ResponseDto responseDto = new ResponseDto();
         fileDto.setPath(FILE_DOMAIN+path);
         responseDto.setContent(fileDto);
+
+        if (fileDto.getShardIndex() == fileDto.getShardTotal()){
+            this.merge(fileDto);
+        }
         return responseDto;
     }
 
-    @GetMapping("/merge")
-    public ResponseDto merge() throws IOException {
-        File newFile = new File(FILE_PATH + "/course/test123.mp4");   //最终输出的文件
+    public void merge(FileDto fileDto) throws IOException {
+        log.info("开始合并分片:");
+        String path = fileDto.getPath();
+        path = path.replace(FILE_DOMAIN, ""); //course\6sfSqfOwzmik4A4icMYuUe.mp4
+        Integer shardTotal = fileDto.getShardTotal();
+        File newFile = new File(FILE_PATH + path);   //最终输出的文件
         FileOutputStream outputStream = new FileOutputStream(newFile, true); //文件追加写入
         FileInputStream fileInputStream = null; //分片文件
         byte[] byt = new byte[1 * 1024 * 1024];
         int len;
         try {
-            //读取第一个分片 b180UX5L.blob
-            fileInputStream = new FileInputStream(new File(FILE_PATH + "/course/b180UX5L.blob"));
-            while ((len = fileInputStream.read(byt)) != -1) {
-                outputStream.write(byt, 0, len);
-            }
-            //读取第二个分片 vE8DbTCI.blob
-            fileInputStream = new FileInputStream(new File(FILE_PATH + "/course/b180UX5L.blob"));
-            while ((len = fileInputStream.read(byt)) != -1) {
-                outputStream.write(byt, 0, len);
+            for (int i = 0; i < shardTotal; i++) {
+                fileInputStream = new FileInputStream(new File(FILE_PATH + path+"."+(i+1)));
+                while ((len = fileInputStream.read(byt)) != -1) {
+                    outputStream.write(byt, 0, len);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +109,6 @@ public class UploadController {
                 e.printStackTrace();
             }
         }
-        ResponseDto responseDto = new ResponseDto();
-        return responseDto;
+        log.info("合并分片结束");
     }
 }
