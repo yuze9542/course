@@ -62,7 +62,7 @@
 
                 //文件分片
                 let shareSize = 1 *1024*1024 ;  //以20MB为一个分片
-                let shardIndex = 0 ;  //分片索引
+                let shardIndex = 1 ;  //分片索引
                 let start = shardIndex * shareSize; //当前分片起始位置
                 let end = Math.min(start + shareSize,file.size);//当前分片结束位置
                 let fileShard = file.slice(start,end);

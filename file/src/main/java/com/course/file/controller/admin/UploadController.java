@@ -9,15 +9,11 @@ import com.course.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 @RestController
@@ -76,4 +72,37 @@ public class UploadController {
         return responseDto;
     }
 
+    @GetMapping("/merge")
+    public ResponseDto merge() throws IOException {
+        File newFile = new File(FILE_PATH + "/course/test123.mp4");   //最终输出的文件
+        FileOutputStream outputStream = new FileOutputStream(newFile, true); //文件追加写入
+        FileInputStream fileInputStream = null; //分片文件
+        byte[] byt = new byte[1 * 1024 * 1024];
+        int len;
+        try {
+            //读取第一个分片 b180UX5L.blob
+            fileInputStream = new FileInputStream(new File(FILE_PATH + "/course/b180UX5L.blob"));
+            while ((len = fileInputStream.read(byt)) != -1) {
+                outputStream.write(byt, 0, len);
+            }
+            //读取第二个分片 vE8DbTCI.blob
+            fileInputStream = new FileInputStream(new File(FILE_PATH + "/course/b180UX5L.blob"));
+            while ((len = fileInputStream.read(byt)) != -1) {
+                outputStream.write(byt, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        ResponseDto responseDto = new ResponseDto();
+        return responseDto;
+    }
 }
