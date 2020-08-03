@@ -32,19 +32,23 @@ public class UploadController {
     private static final Logger log = LoggerFactory.getLogger(UploadController.class);
     private static final String BUSINESS_NAME = "文件上传";
 
-    //file 必须要和前端名字一致 formData的key一致
+    //拿到前端相同名字的数据
     @PostMapping("/upload")
-    public ResponseDto upload(@RequestBody FileDto fileDto) throws IOException {
+    public ResponseDto upload(@RequestBody FileDto fileDto) throws IOException, InterruptedException {
+
         log.info("上传文件开始:");
+        //先获取数据
         String use = fileDto.getUse();
         String key = fileDto.getKey();
         String suffix = fileDto.getSuffix();
         String shardBase64 = fileDto.getShard();
+//        将图片或者视频转换为base64格式文件
         MultipartFile shard = Base64ToMultipartFile.base64ToMultipart(shardBase64);
         //保存文件到本地
         FileUseEnum useEnum = FileUseEnum.getByCode(use);
         //如果不存在则创建
         String dir = useEnum.name().toLowerCase();
+//        FILE_PATH: 本地绝对路径地址
         File fullDir = new File(FILE_PATH+dir);
         if(!fullDir.exists()){
             fullDir.mkdir();
@@ -52,6 +56,7 @@ public class UploadController {
 
         //File.separator是产生斜杠的意思
 //        String path = dir + File.separator + key + "." + suffix+"."+fileDto.getShardIndex();
+//        相对地址
         String path = new StringBuffer(dir)
                 .append(File.separator)
                 .append(key)
@@ -80,7 +85,7 @@ public class UploadController {
         return responseDto;
     }
 
-    public void merge(FileDto fileDto) throws IOException {
+    public void merge(FileDto fileDto) throws IOException, InterruptedException {
         log.info("开始合并分片:");
         String path = fileDto.getPath();
         path = path.replace(FILE_DOMAIN, ""); //course\6sfSqfOwzmik4A4icMYuUe.mp4
@@ -110,5 +115,18 @@ public class UploadController {
             }
         }
         log.info("合并分片结束");
+
+        System.gc();
+        Thread.sleep(100);
+
+        // 删除分片
+        log.info("删除分片开始");
+        for (int i = 0; i < shardTotal; i++) {
+            String filePath = FILE_PATH + path + "." + (i + 1);
+            File file = new File(filePath);
+            boolean result = file.delete();
+            log.info("删除{}，{}", filePath, result ? "成功" : "失败");
+        }
+        log.info("删除分片结束");
     }
 }

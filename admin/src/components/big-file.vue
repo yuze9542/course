@@ -74,7 +74,7 @@
                 }
 
                 //文件分片
-                let shardSize = 2 *1024*1024 ;  //以20MB为一个分片
+                let shardSize = 4 *1024*1024 ;  //以20MB为一个分片
                 let shardIndex = 1 ;  //分片索引 1 表示第一个分片
 
                 let size = file.size;
@@ -121,7 +121,7 @@
                         } else {
                             // Progress.hide();
                             _this.afterUpload(resp);
-                            // $("#" + _this.inputId + "-input").val("");
+                            $("#" + _this.inputId + "-input").val("");
                         }
                     });
                 };
