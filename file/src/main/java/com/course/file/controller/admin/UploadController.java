@@ -79,7 +79,7 @@ public class UploadController {
         fileDto.setPath(FILE_DOMAIN+path);
         responseDto.setContent(fileDto);
 
-        if (fileDto.getShardIndex() == fileDto.getShardTotal()){
+        if (fileDto.getShardIndex().equals(fileDto.getShardTotal())){
             this.merge(fileDto);
         }
         return responseDto;
@@ -117,7 +117,7 @@ public class UploadController {
         log.info("合并分片结束");
 
         System.gc();
-        Thread.sleep(100);
+        Thread.sleep(140);
 
         // 删除分片
         log.info("删除分片开始");
@@ -128,5 +128,17 @@ public class UploadController {
             log.info("删除{}，{}", filePath, result ? "成功" : "失败");
         }
         log.info("删除分片结束");
+    }
+
+    @GetMapping("/check/{key}")
+    public ResponseDto check(@PathVariable String key){
+        log.info("上传文件开始: {}",key);
+        ResponseDto responseDto = new ResponseDto();
+        FileDto fileDto = fileService.findByKey(key);
+        if(fileDto != null)
+            fileDto.setPath(FILE_DOMAIN + fileDto.getPath());
+        responseDto.setContent(fileDto);
+        return  responseDto;
+
     }
 }

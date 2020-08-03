@@ -80,12 +80,12 @@
               <div class="form-group">
                 <label  class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <file
+                  <big-file
                     :input-id="'image-upload'"
                     :suffixes="['jpg','jpeg','png']"
                     :text="'头像上传'"
-                    :use="FILE_USE.TEACHER.key"
-                    :after-upload="afterUpdate"></file>
+                    :use="FILE_USE.COURSE.key"
+                    :after-upload="afterUpdate"></big-file>
                   <div class="row" v-show="teacher.image">
                     <div class="col-md-4">
                       <img :src="teacher.image" alt="" class="img-responsive">
@@ -125,9 +125,9 @@
 
 <script>
     import Pagination from "../../components/pagination";
-    import File from "../../components/uploadFile";
+    import BigFile from "../../components/big-file";
     export default {
-        components: {File, Pagination},
+        components: {BigFile, Pagination},
         name: "business-teacher",
         data: function() {
             return {
