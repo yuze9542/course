@@ -44,6 +44,11 @@
                 // file === document.querySelector("#file-upload-input").files[0]
                 let file = _this.$refs.file.files[0]
 
+                let key = hex_md5(file);
+                let key10 = parseInt(key,16);
+                let key62= Tool._10to62(key10);
+                console.log(key,key10,key62);
+
                 let suffixs = _this.suffixes;
                 let fileName = file.name;
                 let  suffix = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length).toLowerCase();
@@ -61,23 +66,61 @@
                 }
 
                 //文件分片
-                let shareSize = 1 *1024*1024 ;  //以20MB为一个分片
-                let shardIndex = 1 ;  //分片索引
-                let start = shardIndex * shareSize; //当前分片起始位置
-                let end = Math.min(start + shareSize,file.size);//当前分片结束位置
+                let shardSize = 2 *1024*1024 ;  //以20MB为一个分片
+                let shardIndex = 3 ;  //分片索引 1 表示第一个分片
+                let start = (shardIndex - 1) * shardSize; //当前分片起始位置
+                let end = Math.min(start + shardSize,file.size);//当前分片结束位置
                 let fileShard = file.slice(start,end);
 
+                let size = file.size;
+                let shardTotal = Math.ceil(size / shardSize);   //分片总数
+
+
                 //key: file必须和后端Controller参数名保持一致
-                formData.append("file",fileShard);
-                formData.append("use",_this.use);
-                Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
-                    Loading.hide();
-                    let resp = response.data;
-                    console.log("上传文件成功: ",resp);
-                    _this.afterUpload(resp);
-                    $("#"+_this.inputId+"-input").val("");
-                })
+                // formData.append("shard",fileShard);
+                // formData.append("use",_this.use);
+                // formData.append("shardIndex",shardIndex);
+                // formData.append("shardSize",shardSize);
+                // formData.append("size",size);
+                // formData.append("shardTotal",shardTotal);
+                // formData.append("suffix",suffix); //后缀
+                // formData.append("name",name);
+                // formData.append("key",key62);
+                // Loading.show();
+                // _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
+                //     Loading.hide();
+                //     let resp = response.data;
+                //     console.log("上传文件成功: ",resp);
+                //     _this.afterUpload(resp);
+                //     $("#"+_this.inputId+"-input").val("");
+                // })
+
+
+                //将图片转为base64进行传输
+                let fileReader = new FileReader();
+                fileReader.onload = function (e) {
+                    let base64 = e.target.result;
+                    console.log("base64",base64);
+
+                    let param = {
+                        'shard':base64,
+                        'shardIndex': shardIndex,
+                        'shardSize': shardSize,
+                        'shardTotal': shardTotal,
+                        'use': _this.use,
+                        'name': file.name,
+                        'suffix': suffix,
+                        'size': file.size,
+                        'key': key62
+                    };
+                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', param).then((response)=>{
+                        Loading.hide();
+                        let resp = response.data;
+                        _this.afterUpload(resp);
+                        $("#"+_this.inputId+"-input").val("");
+                    })
+                };
+                fileReader.readAsDataURL(fileShard);
             }
         }
 

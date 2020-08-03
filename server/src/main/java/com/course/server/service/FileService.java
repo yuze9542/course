@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -48,9 +49,11 @@ public class FileService {
     public void save(FileDto fileDto){
 
         File file = CopyUtil.copy(fileDto,File.class);
-        if(StringUtils.isEmpty(fileDto.getId())){
+        File fileDb = selectByKey(fileDto.getKey());
+        if(fileDb == null){
             this.insert(file);
         }else{
+            fileDb.setShardIndex(fileDto.getShardIndex());
             this.update(file);
         }
 
@@ -73,5 +76,15 @@ public class FileService {
         fileMapper.deleteByPrimaryKey(id);
     }
 
+    public File selectByKey(String key){
+        FileExample example = new FileExample();
+        example.createCriteria().andKeyEqualTo(key);
+        List<File> fileList = fileMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(fileList)){
+            return null;
+        }else {
+            return fileList.get(0);
+        }
+    }
 }
 

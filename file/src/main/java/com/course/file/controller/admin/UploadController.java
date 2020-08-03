@@ -5,6 +5,7 @@ import com.course.server.dto.ResponseDto;
 import com.course.server.enums.FileUseEnum;
 import com.course.server.service.FileService;
 import com.course.server.service.TestService;
+import com.course.server.util.Base64ToMultipartFile;
 import com.course.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,39 +32,41 @@ public class UploadController {
     private static final Logger log = LoggerFactory.getLogger(UploadController.class);
     private static final String BUSINESS_NAME = "文件上传";
 
-    @PostMapping("/upload")
     //file 必须要和前端名字一致 formData的key一致
-    public ResponseDto upload(@RequestParam MultipartFile file,String use) throws IOException {
-
+    @PostMapping("/upload")
+    public ResponseDto upload(@RequestBody FileDto fileDto) throws IOException {
         log.info("上传文件开始:");
-        log.info("文件名: {}", file.getOriginalFilename());
-        log.info("文件大小: {}",file.getSize());
-
+        String use = fileDto.getUse();
+        String key = fileDto.getKey();
+        String suffix = fileDto.getSuffix();
+        String shardBase64 = fileDto.getShard();
+        MultipartFile shard = Base64ToMultipartFile.base64ToMultipart(shardBase64);
         //保存文件到本地
         FileUseEnum useEnum = FileUseEnum.getByCode(use);
-        String filename = file.getOriginalFilename();
-        String suffix = filename.substring(filename.indexOf(".")+1).toLowerCase(); //文件后缀
-
         //如果不存在则创建
         String dir = useEnum.name().toLowerCase();
         File fullDir = new File(FILE_PATH+dir);
-        if(!fullDir.exists())
+        if(!fullDir.exists()){
             fullDir.mkdir();
+        }
 
-        String key = UuidUtil.getShortUuid();
         //File.separator是产生斜杠的意思
-        String path = dir + File.separator + key + "." + suffix;
+//        String path = dir + File.separator + key + "." + suffix+"."+fileDto.getShardIndex();
+        String path = new StringBuffer(dir)
+                .append(File.separator)
+                .append(key)
+                .append(".")
+                .append(suffix)
+                .append(".")
+                .append(fileDto.getShardIndex())
+                .toString()
+                ; // course\6sfSqfOwzmik4A4icMYuUe.mp4
         String fullpath = FILE_PATH +path;
         File dest = new File(fullpath);//找到文件夹 需要提前创建好
-        file.transferTo(dest);//将文件写到全路径
+        shard.transferTo(dest);//将文件写到全路径
         log.info(dest.getAbsolutePath());
         log.info("保存文件记录开始");
-        FileDto fileDto = new FileDto();
-        fileDto.setName(filename);
         fileDto.setPath(path);
-        fileDto.setSize(Math.toIntExact(file.getSize()));
-        fileDto.setSuffix(suffix);
-        fileDto.setUse("");
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
