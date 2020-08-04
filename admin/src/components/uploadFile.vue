@@ -35,17 +35,14 @@
                 default: null
             },
         },
-        data: function () {
-            return {
-            }
-        },
+
         methods: {
             uploadFile () {
                 let _this = this;
                 let formData = new window.FormData();
                 let file = _this.$refs.file.files[0];
 
-                console.log(JSON.stringify(file));
+                // console.log(JSON.stringify(file));
 
                 // 生成文件标识，标识多次上传的是不是同一个文件
                 let key = hex_md5(file.name + file.size + file.type);

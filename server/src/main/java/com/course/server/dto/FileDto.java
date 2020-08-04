@@ -50,6 +50,16 @@ public class FileDto {
 
     private String key;
 
+    private String vod;
+
+    public String getVod() {
+        return vod;
+    }
+
+    public void setVod(String vod) {
+        this.vod = vod;
+    }
+
     /**
      * 修改时间
      */

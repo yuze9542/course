@@ -18,7 +18,7 @@
         <th>顺序</th>
         <th>修改时间</th>
         <th>vod</th>
-      <th>操作</th>
+        <th>操作</th>
       </tr>
       </thead>
 
@@ -30,51 +30,51 @@
         <td>{{section.chapterId}}</td>
         <td>{{section.video}}</td>
         <td>{{section.time  | formatSecond}}</td>
-<!--        <td>{{section.charge}}</td>-->
+        <!--        <td>{{section.charge}}</td>-->
         <td>{{SECTION_CHARGE | optionKV(section.charge)}}</td>
         <td>{{section.sort}}</td>
         <td>{{section.updatedAt}}</td>
         <td>{{section.vod}}</td>
-      <td>
-        <div class="hidden-sm hidden-xs btn-group">
-          <button @click="edit(section)" class="btn btn-xs btn-info">
-            <i class="ace-icon fa fa-pencil bigger-120"></i>
-          </button>
-
-          <button @click="del(section.id)" class="btn btn-xs btn-danger">
-            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-          </button>
-
-        </div>
-        <!--          小屏幕隐藏按钮-->
-        <div class="hidden-md hidden-lg">
-          <div class="inline pos-rel">
-            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-              <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+        <td>
+          <div class="hidden-sm hidden-xs btn-group">
+            <button @click="edit(section)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
 
-            <ul
-              class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+            <button @click="del(section.id)" class="btn btn-xs btn-danger">
+              <i class="ace-icon fa fa-trash-o bigger-120"></i>
+            </button>
 
-              <li>
-                <a href="#" @click="edit(section)" class="tooltip-success" data-rel="tooltip" title="Edit">
+          </div>
+          <!--          小屏幕隐藏按钮-->
+          <div class="hidden-md hidden-lg">
+            <div class="inline pos-rel">
+              <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+              </button>
+
+              <ul
+                class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+
+                <li>
+                  <a href="#" @click="edit(section)" class="tooltip-success" data-rel="tooltip" title="Edit">
 																			<span class="green">
 																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																			</span>
-                </a>
-              </li>
+                  </a>
+                </li>
 
-              <li>
-                <a href="#" @click="del(section.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
+                <li>
+                  <a href="#" @click="del(section.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
                     <span class="red">
                       <i class="ace-icon fa fa-trash-o bigger-120"></i>
                     </span>
-                </a>
-              </li>
-            </ul>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </td>
+        </td>
       </tr>
 
       </tbody>
@@ -130,18 +130,28 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <big-file
+                  <input disabled v-model="section.video" class="form-control">
+                </div>
+                <div class="col-sm-10">
+                  <vod
                     :input-id="'video-upload'"
                     :suffixes="['mp4']"
                     :text="'上传大视频'"
                     :use="FILE_USE.COURSE.key"
-                    :after-upload="afterUpdate"></big-file>
+                    :after-upload="afterUpdate"></vod>
                   <div class="row" v-show="section.video">
                     <div class="col-md-10">
-                      <video id="video" :src="section.video" alt="" controls="controls">
+                      <player ref="player"></player>
+                      <video class="hidden" v-bind:src="section.video" id="video" controls="controls">
                       </video>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">vod</label>
+                <div class="col-sm-10">
+                  <input v-model="section.vod" disabled class="form-control">
                 </div>
               </div>
               <div class="form-group">
@@ -151,12 +161,12 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">收费</label>
+                <label @change="getTime()"  class="col-sm-2 control-label">收费</label>
                 <div class="col-sm-10">
                   <select v-model="section.charge"  class="form-control">
                     <option v-for="o in SECTION_CHARGE" v-bind:value="o.key">{{o.value}}</option>
                   </select>
-<!--                  <input v-model="section.charge" class="form-control">-->
+                  <!--                  <input v-model="section.charge" class="form-control">-->
                 </div>
               </div>
               <div class="form-group">
@@ -165,12 +175,7 @@
                   <input v-model="section.sort" class="form-control">
                 </div>
               </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">vod</label>
-                <div class="col-sm-10">
-                  <input v-model="section.vod" class="form-control">
-                </div>
-              </div>
+
             </form>
           </div>
           <div class="modal-footer">
@@ -189,10 +194,12 @@
     import Pagination from "../../components/pagination";
     import File from "../../components/uploadFile";
     import BigFile from "../../components/big-file";
+    import Vod from "../../components/vod";
+    import Player from "../../components/player";
 
     export default {
         name: 'business-section',
-        components: {Pagination,File,BigFile},
+        components: {Player, Pagination,File,BigFile,Vod},
         data: function () {
             return {
                 //section绑定表单数据
@@ -210,8 +217,7 @@
 
             let course = SessionStorage.get(SESSION_KEY_COURSE) ||  {} // 加{} 防止course为空报错
             let chapter = SessionStorage.get(SESSION_KEY_CHAPTER) ||  {} // 加{} 防止chapter为空报错
-            console.log("course",course)
-            console.log("chapter",chapter)
+
             if(Tool.isEmpty(course) || Tool.isEmpty(chapter)){
                 _this.$router.push("./welcome")
             }
@@ -262,6 +268,7 @@
             },
             save(){
                 let _this = this;
+                _this.section.video = "";
 
                 // 保存校验
                 if (1 != 1
@@ -274,10 +281,12 @@
 
                 _this.section.courseId = _this.course.id;
                 _this.section.chapterId = _this.chapter.id;
+                let ele = document.getElementById("video");
+                _this.section.time = parseInt(ele.duration, 10);
 
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER+"/business/admin/section/save",
-                _this.section).then((response) => {
+                    _this.section).then((response) => {
                     Loading.hide();
                     let resp = response.data; // 返回的是 ResponseDto 数据
                     if(resp.success){
@@ -292,20 +301,23 @@
             add(){
                 let _this = this;
                 _this.section = {},
-                $("#form-modal").modal("show");
+                    $("#form-modal").modal("show");
             },
 
-            afterUpdate(resp){
+             afterUpdate(resp){
                 let _this = this;
                 let video = resp.content.path;
+                let vod = resp.content.vod;
                 _this.section.video = video;
-                _this.getTime()
+                _this.section.vod = vod;
+                _this.$refs.player.playUrl(video);
             },
             //获取时长
             getTime() {
                 let _this = this;
                 setTimeout(function () {
-                    let ele = $("#video");
+                    let ele = document.getElementById("video");
+                    console.log("ele",parseInt(ele.duration, 10));
                     _this.section.time = parseInt(ele.duration, 10);
                 }, 1000);
             },

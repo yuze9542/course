@@ -42,9 +42,9 @@ public class VodUtil {
         request.setTitle(fileName);
         //request.setDescription("this is desc");
         //request.setTags("tag1,tag2");
-//        request.setCoverURL("http://vod.aliyun.com/test_cover_url.jpg");
-//        request.setCateId(1000115308L);
-//        request.setTemplateGroupId("78fffb8c0c2426efd5baaaafed76fe36");
+        request.setCoverURL("http://vod.aliyun.com/test_cover_url.jpg");
+        request.setCateId(1000173142L);//分类
+        request.setTemplateGroupId("d3426a1f8f4e3f78943ddf307b71ca68");//转码
         //request.setWorkflowId("");
         //request.setStorageLocation("");
         //request.setAppId("app-1000000");
@@ -74,7 +74,9 @@ public class VodUtil {
      * @param uploadAddress
      * @param inputStream
      */
-    public static void uploadLocalFile(OSSClient ossClient, JSONObject uploadAddress, InputStream inputStream){
+    public static void uploadLocalFile(OSSClient ossClient,
+                                       JSONObject uploadAddress,
+                                       InputStream inputStream){
         String bucketName = uploadAddress.getString("Bucket");
         String objectName = uploadAddress.getString("FileName");
         // 单文件上传

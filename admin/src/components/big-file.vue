@@ -1,10 +1,10 @@
 <template>
   <div>
-    <input class="hidden" ref="file"  :id="inputId+'-input'"  @change="uploadFile()" type="file" >
-    <button type="button" @click="selectFile()" class="btn btn-white btn-default btn-round">
+    <button type="button" v-on:click="selectFile()" class="btn btn-white btn-default btn-round">
       <i class="ace-icon fa fa-upload"></i>
       {{text}}
     </button>
+    <input class="hidden" type="file" ref="file" v-on:change="uploadFile()" v-bind:id="inputId+'-input'">
   </div>
 </template>
 
@@ -46,14 +46,28 @@
                 let file = _this.$refs.file.files[0];
 
                 console.log(JSON.stringify(file));
+                /*
+                  name: "test.mp4"
+                  lastModified: 1901173357457
+                  lastModifiedDate: Tue May 27 2099 14:49:17 GMT+0800 (中国标准时间) {}
+                  webkitRelativePath: ""
+                  size: 37415970
+                  type: "video/mp4"
+                */
 
                 // 生成文件标识，标识多次上传的是不是同一个文件
                 let key = hex_md5(file.name + file.size + file.type);
                 let key10 = parseInt(key, 16);
                 let key62 = Tool._10to62(key10);
+                console.log(key, key10, key62);
+                console.log(hex_md5(Array()));
+                /*
+                  d41d8cd98f00b204e9800998ecf8427e
+                  2.8194976848941264e+38
+                  6sfSqfOwzmik4A4icMYuUe
+                 */
 
                 // 判断文件格式
-
                 let suffixes = _this.suffixes;
                 let fileName = file.name;
                 let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
@@ -143,7 +157,7 @@
 
                     param.shard = base64;
 
-                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-append', param).then((response) => {
+                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/' + _this.url, param).then((response) => {
                         let resp = response.data;
                         console.log("上传文件成功：", resp);
                         Progress.show(parseInt(shardIndex * 100 / shardTotal));
@@ -177,4 +191,3 @@
         }
     }
 </script>
-
