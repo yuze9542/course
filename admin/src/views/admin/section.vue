@@ -302,11 +302,13 @@
                 _this.getTime()
             },
             //获取时长
-            getTime(){
-                let _this =this;
-                let ele = $("#video");
-                _this.section.time = parseInt(ele.duration,10)
-            }
+            getTime() {
+                let _this = this;
+                setTimeout(function () {
+                    let ele = $("#video");
+                    _this.section.time = parseInt(ele.duration, 10);
+                }, 1000);
+            },
         }
     }
 </script>

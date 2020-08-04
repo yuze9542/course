@@ -68,7 +68,7 @@ public class UploadController {
                 .append(fileDto.getShardIndex())
                 .toString(); // course\6sfSqfOwzmik4A4icMYuUe.mp4.1
         String fullpath = FILE_PATH +localPath;
-        File dest = new File(fullpath);//找到文件夹 需要提前创建好
+        File dest = new File(fullpath);//找到文件夹
         shard.transferTo(dest);//将文件写到全路径
         log.info(dest.getAbsolutePath());
         log.info("保存文件记录开始");

@@ -115,12 +115,12 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">封面</label>
                 <div class="col-sm-10">
-                  <big-file
+                  <file
                     :input-id="'image-upload'"
                     :suffixes="['jpg','jpeg','png']"
                     :text="'封面上传'"
                     :use="FILE_USE.COURSE.key"
-                    :after-upload="afterUpdate"></big-file>
+                    :after-upload="afterUpdate"></file>
                   <div class="row" v-show="course.image">
                     <div class="col-md-4">
                       <img :src="course.image" alt="" class="img-responsive">
@@ -238,9 +238,9 @@
 
 <script>
     import Pagination from "../../components/pagination";
-    import BigFile from "../../components/big-file";
+    import File from "../../components/uploadFile";
     export default {
-        components: {Pagination,BigFile},
+        components: {Pagination,File},
         name: "business-course",
         data: function() {
             return {
