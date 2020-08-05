@@ -4,8 +4,11 @@ import router from './router'
 import axios from 'axios'
 import filter from './filter/filter'
 
-Vue.config.productionTip = false
-Vue.prototype.$ajax = axios
+Vue.config.productionTip = false;
+Vue.prototype.$ajax = axios;
+
+//解决前后端 sessionId 不一样的问题
+axios.defaults.withCredentials = true
 
 /**
  * axios拦截器
