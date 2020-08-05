@@ -44,7 +44,7 @@
 
                         <div class="clearfix">
                           <label class="inline">
-                            <input type="checkbox" class="ace"/>
+                            <input v-model="remember" type="checkbox" class="ace"/>
                             <span class="lbl"> 记住我</span>
                           </label>
 
@@ -79,6 +79,7 @@
         data: function(){
             return {
                 user: {},
+                remember: true,
             }
         },
         methods: {
@@ -94,18 +95,33 @@
                 ) {
                     return;
                 }
-                _this.user.password = hex_md5(_this.user.password + KEY);
+                //此处是文本框里的 两套密码 区别是加不加 KEY 这个常量
+                let hexMd5 = hex_md5(_this.user.password);
+                let rememberUser = LocalStorage.get("loginUser") || {};
+                if (hexMd5 !== rememberUser.md5){
+                    _this.user.password = hex_md5(_this.user.password + KEY);
+                }
+
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/login', _this.user).then((response) => {
                     Loading.hide();
                     let resp = response.data;
                     if (resp.success) {
-                        console.log(resp.content);
+                        let loginUser = resp.content;
                         $("#form-modal").modal("hide");
-                        // SessionStorage.set("USER",resp.content);
+                        if(_this.remember){
+                            let hexMd5 = hex_md5(_this.user.password);
+                            LocalStorage.set("loginUser",{
+                                loginName: loginUser.loginName,
+                                password: _this.user.password,
+                                md5:hexMd5
+                            })
+                        }else {
+                            LocalStorage.set("loginUser",null)
+                        }
                         Tool.setLoginUser(resp.content);
                         _this.$router.push("/welcome");
-                        Toast.success("保存成功！");
+                        Toast.success("登录成功！");
                     } else {
                         Toast.warning(resp.message)
                     }
@@ -113,8 +129,13 @@
             },
         },
         mounted: function () {
+            let _this= this;
             $('body').removeClass('no-skin');
             $('body').attr('class', 'login-layout light-login');
+            let rememberUser = LocalStorage.get("loginUser");
+            if(rememberUser){
+                _this.user = rememberUser;
+            }
         }
     }
 
