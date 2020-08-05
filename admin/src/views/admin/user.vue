@@ -54,24 +54,24 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">登陆名</label>
-                            <div class="col-sm-10">
-                              <input v-model="user.loginName" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">昵称</label>
-                            <div class="col-sm-10">
-                              <input v-model="user.name" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-sm-2 control-label">密码</label>
-                            <div class="col-sm-10">
-                              <input v-model="user.password" class="form-control">
-                            </div>
-                          </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">登陆名</label>
+                <div class="col-sm-10">
+                  <input v-model="user.loginName" v-bind:disabled="user.id" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">昵称</label>
+                <div class="col-sm-10">
+                  <input v-model="user.name" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10">
+                  <input v-model="user.password" class="form-control">
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">

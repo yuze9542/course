@@ -1,5 +1,7 @@
 package com.course.server.service;
 
+import com.course.server.exception.BusinessException;
+import com.course.server.exception.BusinessExceptionCode;
 import com.course.server.domain.User;
 import com.course.server.domain.UserExample;
 import com.course.server.dto.UserDto;
@@ -9,15 +11,11 @@ import com.course.server.util.CopyUtil;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,7 +55,28 @@ public class UserService {
 
     private void insert(User user){
         user.setId(UuidUtil.getShortUuid());
-        userMapper.insert(user);
+        User isExistUser = selectByLoginName(user.getLoginName());
+        if(isExistUser == null){
+            userMapper.insert(user);
+        }else {
+            throw  new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+        }
+    }
+
+    /**
+     * 用于查询用户名是否存在
+     * @param user
+     */
+    private User selectByLoginName(String loginName){
+        UserExample example = new UserExample();
+        example.createCriteria().andLoginNameEqualTo(loginName);
+        List<User> userList = userMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(userList)){
+            return null;
+        }else{
+            return userList.get(0);
+        }
+
     }
 
     private void update(User user){
