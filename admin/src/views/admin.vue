@@ -296,25 +296,9 @@
 
               <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                 <li>
-                  <a href="#">
-                    <i class="ace-icon fa fa-cog"></i>
-                    Settings
-                  </a>
-                </li>
-
-                <li>
-                  <a href="profile.html">
-                    <i class="ace-icon fa fa-user"></i>
-                    Profile
-                  </a>
-                </li>
-
-                <li class="divider"></li>
-
-                <li>
-                  <a href="#">
+                  <a href="#" @click="logout()">
                     <i class="ace-icon fa fa-power-off"></i>
-                    Logout
+                    退出登录
                   </a>
                 </li>
               </ul>
@@ -526,6 +510,22 @@
                 }
                 return false;
             },
+            logout(){
+                let _this = this;
+
+                Loading.show();
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout').then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    if (resp.success) {
+                        Tool.setLoginUser(null);
+                        _this.$router.push("/login");
+                        Toast.success("退出成功！");
+                    } else {
+                        Toast.warning(resp.message)
+                    }
+                })
+            }
         },
         watch: {
             $route: {
