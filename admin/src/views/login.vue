@@ -28,14 +28,14 @@
                       <fieldset>
                         <label class="block clearfix">
                           <span class="block input-icon input-icon-right">
-                              <input type="text" class="form-control" placeholder="Username"/>
+                              <input v-model="user.loginName" type="text" class="form-control" placeholder="Username"/>
                               <i class="ace-icon fa fa-user"></i>
                           </span>
                         </label>
 
                         <label class="block clearfix">
                           <span class="block input-icon input-icon-right">
-                              <input type="password" class="form-control" placeholder="Password"/>
+                              <input v-model="user.password" type="password" class="form-control" placeholder="Password"/>
                               <i class="ace-icon fa fa-lock"></i>
                           </span>
                         </label>
@@ -64,8 +64,6 @@
                   </div><!-- /.widget-main -->
                 </div><!-- /.widget-body -->
               </div><!-- /.login-box -->
-
-
             </div><!-- /.position-relative -->
           </div>
         </div><!-- /.col -->
@@ -78,9 +76,40 @@
 
     export default {
         name: 'login',
+        data: function(){
+            return {
+                user: {},
+            }
+        },
         methods: {
             login() {
-                this.$router.push("/welcome")
+
+                let _this = this;
+
+                // 保存校验
+                if (1 != 1
+                    || !Validator.require(_this.user.loginName, "登陆名")
+                    || !Validator.length(_this.user.loginName, "登陆名", 1, 50)
+                    || !Validator.require(_this.user.password, "密码")
+                ) {
+                    return;
+                }
+                _this.user.password = hex_md5(_this.user.password + KEY);
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/login', _this.user).then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    if (resp.success) {
+                        console.log(resp.content);
+                        $("#form-modal").modal("hide");
+                        // SessionStorage.set("USER",resp.content);
+                        Tool.setLoginUser(resp.content);
+                        _this.$router.push("/welcome");
+                        Toast.success("保存成功！");
+                    } else {
+                        Toast.warning(resp.message)
+                    }
+                })
             },
         },
         mounted: function () {

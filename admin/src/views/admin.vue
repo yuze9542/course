@@ -287,8 +287,8 @@
               <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                 <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo"/>
                 <span class="user-info">
-									<small>Welcome,</small>
-									Jason
+									<small>欢迎你呀 ~ </small>
+                     {{loginUser.name}}
 								</span>
 
                 <i class="ace-icon fa fa-caret-down"></i>
@@ -362,37 +362,36 @@
           <li class="" id="welcome-sidebar">
             <router-link to="/welcome">
               <i class="menu-icon fa fa-tachometer"></i>
-              <span class="menu-text"> 欢迎你呀~ </span>
+              <span class="menu-text"> 欢迎你呀~ {{loginUser.name}}</span>
             </router-link>
 
             <b class="arrow"></b>
           </li>
 
-          <li class="open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 文件管理 </span>
-
               <b class="arrow fa fa-angle-down"></b>
             </a>
-
             <b class="arrow"></b>
-
             <ul class="submenu">
-              <li class="active" id="system-user-sidebar">
+
+              <li class="" id="system-user-sidebar">
                 <router-link to="/system/user">
                   <i class="menu-icon fa fa-caret-right"></i>
                   用户管理
                 </router-link>
                 <b class="arrow"></b>
               </li>
-              <li class="active" id="file-fole-sidebar">
+              <li class="" id="file-fole-sidebar">
                 <router-link to="/file/file">
                   <i class="menu-icon fa fa-caret-right"></i>
                   文件管理
                 </router-link>
                 <b class="arrow"></b>
               </li>
+
             </ul>
           </li>
 
@@ -407,15 +406,14 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="active" id="business-category-sidebar">
-
+              <li class="" id="business-category-sidebar">
                 <router-link to="/business/category">
                   <i class="menu-icon fa fa-caret-right"></i>
                   分类管理
                 </router-link>
                 <b class="arrow"></b>
               </li>
-              <li class="active" id="business-course-sidebar">
+              <li class="" id="business-course-sidebar">
 
                 <router-link to="/business/course">
                   <i class="menu-icon fa fa-caret-right"></i>
@@ -424,7 +422,7 @@
                 <b class="arrow"></b>
               </li>
 
-              <li class="active" id="business-teacher-sidebar">
+              <li class="" id="business-teacher-sidebar">
 
                 <router-link to="/business/teacher">
                   <i class="menu-icon fa fa-caret-right"></i>
@@ -432,22 +430,6 @@
                 </router-link>
                 <b class="arrow"></b>
               </li>
-
-              <!--              <li class="active" id="business-chapter-sidebar">-->
-<!--                <router-link to="/business/chapter">-->
-<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
-<!--                  大章管理-->
-<!--                </router-link>-->
-
-<!--                <b class="arrow"></b>-->
-<!--              </li>-->
-<!--              <li class="active" id="business-section-sidebar">-->
-<!--                <router-link to="/business/section">-->
-<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
-<!--                  小节管理-->
-<!--                </router-link>-->
-<!--                <b class="arrow"></b>-->
-<!--              </li>-->
             </ul>
           </li>
 
@@ -510,6 +492,11 @@
 
     export default {
         name: 'admin',
+        data: function(){
+            return {
+                loginUser: {},
+            }
+        },
         methods: {
             activeSidebar: function (id) {
                 // 兄弟菜单去掉active样式，自身增加active样式
@@ -524,6 +511,7 @@
                     parentLi.siblings().find("li").removeClass("active");
                     parentLi.addClass("open active");
                 }
+
             },
             hasResourceRouter(router) {
                 let _this = this;
@@ -557,13 +545,14 @@
                 }
             }
         },
-        mounted: function () {
+        mounted: function() {
             $('body').removeClass('login-layout light-login');
             $('body').attr('class', 'no-skin');
             let _this = this;
             _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
-
-        },
-
+            $.getScript("/ace/assets/js/ace.min.js");
+            _this.loginUser = SessionStorage.get("USER") || {};
+            _this.loginUser = Tool.getLoginUser();
+        }
     }
 </script>

@@ -1,5 +1,6 @@
 package com.course.server.service;
 
+import com.course.server.dto.LoginUserDto;
 import com.course.server.exception.BusinessException;
 import com.course.server.exception.BusinessExceptionCode;
 import com.course.server.domain.User;
@@ -11,6 +12,8 @@ import com.course.server.util.CopyUtil;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -20,6 +23,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
     @Resource
     private UserMapper userMapper;
 
@@ -65,7 +70,7 @@ public class UserService {
 
     /**
      * 用于查询用户名是否存在
-     * @param user
+     * @param
      */
     private User selectByLoginName(String loginName){
         UserExample example = new UserExample();
@@ -80,12 +85,42 @@ public class UserService {
     }
 
     private void update(User user){
-        userMapper.updateByPrimaryKey(user);
+        user.setPassword(null);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     public void delete(String id){
         userMapper.deleteByPrimaryKey(id);
     }
 
+    /**
+     * 重置密码
+     * @param userDto
+     * @return
+     */
+    public void setPassword(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setPassword(userDto.getPassword());
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    public LoginUserDto login(UserDto userDto) {
+        User user = selectByLoginName(userDto.getLoginName());
+        if(user.equals(null)){
+            log.info("用户名不存在");
+            throw  new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+
+        }else {
+            if(user.getPassword().equals(userDto.getPassword())){
+                //登陆成功
+                return CopyUtil.copy(user,LoginUserDto.class);
+
+            }else{
+                log.info("密码错了,原密码：{},新密码{}",user.getPassword(),userDto.getPassword());
+                throw  new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
+    }
 }
 
