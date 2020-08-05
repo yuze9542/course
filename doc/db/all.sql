@@ -198,7 +198,7 @@ create table `user` (
 ) engine=innodb default charset=utf8mb4 comment='用户';
 
 # 初始test/test
-insert into `user` (id, login_name, name, password) values ('10000000', 'test', '测试', 'e70e2222a9d67c4f2eae107533359aa4');
+insert into `user` (id, login_name, name, password) values ('10000000', 'noble', '测试', '123');
 
 -- 资源
 drop table if exists `resource`;

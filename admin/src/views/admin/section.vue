@@ -12,7 +12,6 @@
         <th>标题</th>
         <th>课程</th>
         <th>大章</th>
-        <th>视频</th>
         <th>时长</th>
         <th>收费</th>
         <th>顺序</th>
@@ -28,15 +27,16 @@
         <td>{{section.title}}</td>
         <td>{{section.courseId}}</td>
         <td>{{section.chapterId}}</td>
-        <td>{{section.video}}</td>
         <td>{{section.time  | formatSecond}}</td>
-        <!--        <td>{{section.charge}}</td>-->
         <td>{{SECTION_CHARGE | optionKV(section.charge)}}</td>
         <td>{{section.sort}}</td>
         <td>{{section.updatedAt}}</td>
         <td>{{section.vod}}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
+            <button @click="play(section)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-video-camera bigger-120"></i>
+            </button>
             <button @click="edit(section)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
@@ -141,7 +141,7 @@
                     :after-upload="afterUpdate"></vod>
                   <div class="row" v-show="section.video">
                     <div class="col-md-10">
-                      <player ref="player"></player>
+                      <player ref="player" :play-id="'form-player-div'"></player>
                       <video class="hidden" v-bind:src="section.video" id="video" controls="controls">
                       </video>
                     </div>
@@ -187,6 +187,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <modal-player ref="modalPlayer"></modal-player>
   </div>
 
 </template>
@@ -196,10 +197,11 @@
     import BigFile from "../../components/big-file";
     import Vod from "../../components/vod";
     import Player from "../../components/player";
+    import ModalPlayer from "../../components/modal-player";
 
     export default {
         name: 'business-section',
-        components: {Player, Pagination,File,BigFile,Vod},
+        components: {ModalPlayer, Player, Pagination,File,BigFile,Vod},
         data: function () {
             return {
                 //section绑定表单数据
@@ -226,6 +228,10 @@
             _this.list(1);
         },
         methods: {
+            play(section){
+                let _this =this;
+                _this.$refs.modalPlayer.playVod(section.vod);
+            },
             del(id){
                 let _this = this;
                 Confirm.show("删掉可就没了",function () {
