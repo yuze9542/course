@@ -11,6 +11,8 @@ import Teacher from "./views/admin/teacher.vue"
 import File from "./views/admin/file.vue"
 import Content from "./views/admin/content.vue"
 import User from "./views/admin/user"
+import Resource from "./views/admin/resource"
+import Role from "./views/admin/role"
 
 Vue.use(Router);
 
@@ -30,6 +32,9 @@ export default new Router({
         path: "/",
         name:"admin",
         component: Admin,
+        meta:{
+          loginRequire:true,    //登录拦截
+        },
         children:[{
             path: "welcome", //子路由不用 / 标志
             name:"welcome",
@@ -66,6 +71,14 @@ export default new Router({
             path: "system/user",
             name:"system/user",
             component: User,
+        },{
+            path: "system/resource",
+            name:"system/resource",
+            component: Resource,
+        },{
+            path: "system/role",
+            name:"system/role",
+            component: Role,
         }]
-    }]
-})
+            }]
+        })

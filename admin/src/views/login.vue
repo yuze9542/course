@@ -90,7 +90,7 @@
         data: function() {
             return {
                 user: {},
-                remember: true, // 默认勾选记住我
+                remember: false, // 默认勾选记住我
                 imageCodeToken: ""
             }
         },
