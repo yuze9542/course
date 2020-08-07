@@ -2,9 +2,12 @@ package com.course.server.service;
 
 import com.course.server.domain.Role;
 import com.course.server.domain.RoleExample;
+import com.course.server.domain.RoleResource;
+import com.course.server.domain.RoleResourceExample;
 import com.course.server.dto.RoleDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.RoleMapper;
+import com.course.server.mapper.RoleResourceMapper;
 import com.course.server.util.CopyUtil;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -24,6 +27,9 @@ import java.util.List;
 public class RoleService {
     @Resource
     private RoleMapper roleMapper;
+
+    @Resource
+    private RoleResourceMapper roleResourceMapper;
 
     public void list( PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -68,5 +74,34 @@ public class RoleService {
         roleMapper.deleteByPrimaryKey(id);
     }
 
+    public void saveResource(RoleDto roleDto) {
+        String reloId = roleDto.getId();
+        List<String> resourceIds = roleDto.getResourceIds();
+        //先清空库中所有当前角色下记录
+        RoleResourceExample example = new RoleResourceExample();
+        example.createCriteria().andRoleIdEqualTo(reloId);
+        roleResourceMapper.deleteByExample(example);
+        //保存资源角色
+        for (int i = 0; i < resourceIds.size(); i++) {
+            RoleResource roleResource = new RoleResource();
+            roleResource.setId(UuidUtil.getShortUuid());
+            roleResource.setRoleId(reloId);
+            roleResource.setResourceId(resourceIds.get(i));
+            roleResourceMapper.insert(roleResource);
+        }
+    }
+
+    public List<String> listResource(String roleId) {
+        //先清空库中所有当前角色下记录
+        RoleResourceExample example = new RoleResourceExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        //当前角色下所有资源
+        List<RoleResource> roleResourceList = roleResourceMapper.selectByExample(example);
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < roleResourceList.size(); i++) {
+            list.add(roleResourceList.get(i).getResourceId());
+        }
+        return list;
+    }
 }
 

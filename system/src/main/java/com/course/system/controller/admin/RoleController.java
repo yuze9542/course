@@ -11,13 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 //如果返回的是json格式的数据 用RestController
 //如果返回的是页面 就是Controller
 @RestController
 @RequestMapping("/admin/role")
 public class RoleController {
-//    private static final Logger LOG = LoggerFactory.getLogger(RoleController.class);
+    private static final Logger log = LoggerFactory.getLogger(RoleController.class);
     public static final String BUSINESS_NAME = "角色";
     @Resource
     RoleService roleService ;
@@ -51,5 +52,27 @@ public class RoleController {
         roleService.delete(id);
         return responseDto;
     }
+
+    @PostMapping("/save-resource")
+    public ResponseDto savaResource(@RequestBody RoleDto roleDto){
+        log.info("保存角色资源关联");
+        ResponseDto<RoleDto> responseDto = new ResponseDto<>();
+        roleService.saveResource(roleDto);
+        responseDto.setContent(roleDto);
+        return responseDto;
+    }
+
+    /**
+     * 加载已关联的资源
+     */
+    @GetMapping("/save-resource/{roleId}")
+    public ResponseDto listResource(@PathVariable String roleId){
+        log.info("加载角色资源关联");
+        ResponseDto responseDto = new ResponseDto<>();
+        List<String> resourceList = roleService.listResource(roleId);
+        responseDto.setContent(resourceList);
+        return responseDto;
+    }
+
 
 }
