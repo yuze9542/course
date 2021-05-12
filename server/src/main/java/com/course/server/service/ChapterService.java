@@ -27,13 +27,15 @@ public class ChapterService {
     private ChapterMapper chapterMapper;
 
     public void list( ChapterPageDto chapterPageDto){
-        PageHelper.startPage(chapterPageDto.getPage(),chapterPageDto.getSize());
+        PageHelper.startPage(chapterPageDto.getPage(),chapterPageDto.getSize());//分页插件
+
         ChapterExample chapterExample = new ChapterExample();
         ChapterExample.Criteria criteria = chapterExample.createCriteria();
         if(!StringUtils.isEmpty(chapterPageDto.getCourseId())){
             criteria.andCourseIdEqualTo(chapterPageDto.getCourseId());
         }
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);
+
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);//查询结果传给PageInfo
         chapterPageDto.setTotal(pageInfo.getTotal());
         List<ChapterDto> chapterDtoList = CopyUtil.copyList(chapterList,ChapterDto.class);

@@ -123,6 +123,7 @@ Tool = {
    */
   hasResource: function (id) {
     let _this = this;
+    //先获得这个用户的资源
     let resources = _this.getLoginUser().resources;
     if (_this.isEmpty(resources)) {
       return false;

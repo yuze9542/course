@@ -10,12 +10,11 @@ public class CopyUtil {
 
     public static <T> List<T> copyList(List source, Class<T> clazz) {
         List<T> target = new ArrayList<>();
+        //看是不是空 CollectionUtils spring方法
         if (!CollectionUtils.isEmpty(source)){
-            if (!CollectionUtils.isEmpty(source)){
-                for (Object c: source) {
-                    T obj = copy(c, clazz);
-                    target.add(obj);
-                }
+            for (Object c: source) {
+                T obj = copy(c, clazz);
+                target.add(obj);
             }
         }
         return target;
@@ -27,10 +26,11 @@ public class CopyUtil {
         }
         T obj = null;
         try {
-            obj = clazz.newInstance();
+            obj = clazz.newInstance(); //实例化以后
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //核心复制
         BeanUtils.copyProperties(source, obj);
         return obj;
     }

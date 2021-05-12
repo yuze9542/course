@@ -37,10 +37,14 @@ public class CourseService {
     private CourseContentMapper courseContentMapper;
 
     public void list( PageDto pageDto){
+        //分页插件固定格式　１
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+        //相当于 where 语句
         CourseExample courseExample = new CourseExample();
         courseExample.setOrderByClause("sort asc");
+        //查找
         List<Course> courseList = courseMapper.selectByExample(courseExample);
+        //分页插件固定格式　２ 将查找的东西放到pageinfo
         PageInfo<Course> pageInfo = new PageInfo<>(courseList);//查询结果传给PageInfo
         pageDto.setTotal(pageInfo.getTotal());
         List<CourseDto> courseDtoList =  CopyUtil.copyList(courseList, CourseDto.class);
@@ -57,6 +61,7 @@ public class CourseService {
     public void save(CourseDto courseDto){
 
         Course course = CopyUtil.copy(courseDto,Course.class);
+//        StringUtils.isEmpty
         if(StringUtils.isEmpty(courseDto.getId())){
             this.insert(course);
         }else{

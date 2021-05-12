@@ -35,10 +35,10 @@ public class RoleController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody RoleDto roleDto){
         // 保存校验
-                ValidatorUtil.require(roleDto.getName(), "角色");
-                ValidatorUtil.length(roleDto.getName(), "角色", 1, 50);
-                ValidatorUtil.require(roleDto.getDesc(), "描述");
-                ValidatorUtil.length(roleDto.getDesc(), "描述", 1, 100);
+        ValidatorUtil.require(roleDto.getName(), "角色");
+        ValidatorUtil.length(roleDto.getName(), "角色", 1, 50);
+        ValidatorUtil.require(roleDto.getDesc(), "描述");
+        ValidatorUtil.length(roleDto.getDesc(), "描述", 1, 100);
 
         ResponseDto responseDto = new ResponseDto();
         responseDto.setContent(roleDto);
@@ -65,7 +65,7 @@ public class RoleController {
     /**
      * 加载已关联的资源
      */
-    @GetMapping("/save-resource/{roleId}")
+    @GetMapping("/list-resource/{roleId}")
     public ResponseDto listResource(@PathVariable String roleId){
         log.info("加载角色资源关联");
         ResponseDto responseDto = new ResponseDto<>();
@@ -73,6 +73,30 @@ public class RoleController {
         responseDto.setContent(resourceList);
         return responseDto;
     }
+
+    /**
+     * 加载用户
+     */
+    @GetMapping("/list-user/{roleId}")
+    public ResponseDto listUser(@PathVariable String roleId){
+        log.info("加载角色关联: {}",roleId);
+        ResponseDto responseDto = new ResponseDto<>();
+        List<String> userList = roleService.listUser(roleId);
+        responseDto.setContent(userList);
+        return responseDto;
+    }
+    /**
+     * 保存用户
+     */
+    @PostMapping("/save-user")
+    public ResponseDto saveUser(@RequestBody RoleDto roleDto){
+        log.info("保存角色用户关联:  ",roleDto.getUserIds());
+        ResponseDto<RoleDto> responseDto = new ResponseDto<>();
+        roleService.saveUser(roleDto);
+        responseDto.setContent(roleDto);
+        return responseDto;
+    }
+
 
 
 }

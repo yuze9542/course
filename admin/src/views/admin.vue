@@ -360,14 +360,6 @@
             </a>
             <b class="arrow"></b>
             <ul class="submenu">
-
-              <li class="" id="system-user-sidebar">
-                <router-link to="/system/user">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  用户管理
-                </router-link>
-                <b class="arrow"></b>
-              </li>
               <li class="" id="file-fole-sidebar">
                 <router-link to="/file/file">
                   <i class="menu-icon fa fa-caret-right"></i>
@@ -415,7 +407,7 @@
               </li>
             </ul>
           </li>
-          <li class="">
+          <li v-show="hasResource('01')" class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 系统管理 </span>
@@ -426,6 +418,14 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
+
+              <li class="" id="system-user-sidebar">
+                <router-link to="/system/user">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  用户管理
+                </router-link>
+                <b class="arrow"></b>
+              </li>
 
 
               <li class="" id="system-resource-sidebar">
@@ -526,6 +526,9 @@
                     parentLi.addClass("open active");
                 }
 
+            },
+            hasResource(id){
+              return Tool.hasResource(id);
             },
             hasResourceRouter(router) {
                 let _this = this;

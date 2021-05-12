@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/course")
 public class CourseController {
-//    private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
     public static final String BUSINESS_NAME = "课程";
     @Resource
     private CourseService courseService ;
@@ -88,6 +88,7 @@ public class CourseController {
     public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto) {
         ResponseDto responseDto = new ResponseDto();
         courseService.saveContent(courseContentDto);
+        System.out.println(11111);
 //        responseDto.setContent(courseContentDto); //因为是从前端获取来的就不传过去了
         return responseDto;
     }
@@ -96,7 +97,7 @@ public class CourseController {
      * 更新排序
      * @param
      */
-    private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
+//    private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
 
 
     @PostMapping("/sort")

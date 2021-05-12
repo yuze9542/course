@@ -18,6 +18,7 @@ public class FileApplication {
     private static final Logger LOG = LoggerFactory.getLogger(FileApplication.class);
 
     public static void main(String[] args) {
+        //核心
         SpringApplication app = new SpringApplication(FileApplication.class);
         Environment env = app.run(args).getEnvironment();
         LOG.info("启动成功！！");

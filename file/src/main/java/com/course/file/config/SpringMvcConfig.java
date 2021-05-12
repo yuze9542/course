@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
-
+    //干嘛的？？？ 收文件的？？
     @Value("${file.path}")
     private String FILE_PATH;
 

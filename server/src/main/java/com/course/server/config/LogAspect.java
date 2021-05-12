@@ -24,7 +24,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 
-@Aspect
+@Aspect     //切面
 @Component
 public class LogAspect {
 
@@ -35,9 +35,9 @@ public class LogAspect {
      * 所有Controller都打印信息 了
      * */
     @Pointcut("execution(public * com.course.*.controller..*Controller.*(..))")
-    public void controllerPointcut() {}
+    public void controllerPointcut() {} //  什么都不用写
 
-    @Before("controllerPointcut()")
+    @Before("controllerPointcut()")//在所有切点之前
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         // 日志编号
         MDC.put("UUID", UuidUtil.getShortUuid());

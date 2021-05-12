@@ -10,9 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-@EnableEurekaClient
+@EnableEurekaClient  //想不想 nacos
 @MapperScan("com.course.server.mapper")
-@ComponentScan("com.course")
+@ComponentScan("com.course") //注解扫描
 public class SystemApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemApplication.class);

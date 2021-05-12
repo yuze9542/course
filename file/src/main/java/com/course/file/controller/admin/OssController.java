@@ -50,7 +50,6 @@ public class OssController {
 
     @PostMapping("/oss-append")
     public ResponseDto fileUpload(@RequestBody FileDto fileDto) throws Exception {
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         LOG.info("上传文件开始");
         String use = fileDto.getUse();
         String key = fileDto.getKey();

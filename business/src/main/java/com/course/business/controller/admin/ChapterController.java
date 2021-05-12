@@ -19,13 +19,14 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/admin/chapter")
 public class ChapterController {
-//    private static final Logger LOG = LoggerFactory.getLogger(ChapterController.class);
+    private static final Logger log = LoggerFactory.getLogger(ChapterController.class);
     public static final String BUSINESS_NAME = "大章";
     @Resource
     ChapterService chapterService ;
 
     @PostMapping("/list")
     public ResponseDto list(@RequestBody ChapterPageDto chapterPageDto){
+        log.info("列表查询");
         ResponseDto responseDto = new ResponseDto();
         ValidatorUtil.require(chapterPageDto.getCourseId(),"课程ID");
        chapterService.list(chapterPageDto);

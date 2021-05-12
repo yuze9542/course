@@ -20,6 +20,15 @@ public class RoleDto {
      */
     private String desc;
     private List<String> resourceIds;
+    private List<String> userIds;
+
+    public List<String> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<String> userId) {
+        this.userIds = userId;
+    }
 
     public List<String> getResourceIds() {
         return resourceIds;

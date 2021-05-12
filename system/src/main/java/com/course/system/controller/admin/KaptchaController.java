@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/admin/kaptcha")
+@RequestMapping("/admin/kaptcha")//kaptcha验证码库
 public class KaptchaController {
     public static final String BUSINESS_NAME = "图片验证码";
 
@@ -40,6 +40,7 @@ public class KaptchaController {
             // 将生成的验证码放入会话缓存中，后续验证的时候用到
 //             request.getSession().setAttribute(imageCodeToken, createText);
             // 将生成的验证码放入redis缓存中，后续验证的时候用到
+            //imageCodeToken 是随机生成的八位数字 key:imageCodeToken value: createText
             redisTemplate.opsForValue().set(imageCodeToken, createText, 300, TimeUnit.SECONDS);
 
             // 使用验证码字符串生成验证码图片

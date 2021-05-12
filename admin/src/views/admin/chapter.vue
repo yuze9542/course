@@ -45,17 +45,17 @@
 
                 <li>
                   <a href="#" @click="edit(chapter)"   class="tooltip-success" data-rel="tooltip" title="Edit">
-																			<span class="green">
-																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																			</span>
+                    <span class="green">
+                      <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                    </span>
                   </a>
                 </li>
 
                 <li>
                   <a href="#"  @click="del(chapter.id)" class="tooltip-error" data-rel="tooltip" title="Delete">
-																			<span class="red">
-																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																			</span>
+                    <span class="red">
+                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </span>
                   </a>
                 </li>
               </ul>

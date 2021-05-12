@@ -77,7 +77,7 @@ public class UploadController {
                 .toString(); // course\6sfSqfOwzmik4A4icMYuUe.mp4.1
         String fullPath = FILE_PATH + localPath;
         File dest = new File(fullPath);
-        shard.transferTo(dest);
+        shard.transferTo(dest); //将shard传入dest  核心 ！！
         LOG.info(dest.getAbsolutePath());
 
         LOG.info("保存文件记录开始");
@@ -94,7 +94,7 @@ public class UploadController {
         return responseDto;
     }
 
-    public void merge(FileDto fileDto) throws Exception {
+    private void merge(FileDto fileDto) throws Exception {
         LOG.info("合并分片开始");
         String path = fileDto.getPath(); //http://127.0.0.1:9000/file/f/course\6sfSqfOwzmik4A4icMYuUe.mp4
         path = path.replace(FILE_DOMAIN, ""); //course\6sfSqfOwzmik4A4icMYuUe.mp4

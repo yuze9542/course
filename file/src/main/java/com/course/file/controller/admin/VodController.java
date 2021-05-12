@@ -43,7 +43,6 @@ public class VodController {
     @PostMapping("/vod")
     public ResponseDto fileUpload(@RequestBody FileDto fileDto) throws Exception {
         LOG.info("上传文件开始");
-        System.out.println("ssssssssssssssssssssss");
         String use = fileDto.getUse();
         String key = fileDto.getKey();
         String suffix = fileDto.getSuffix();
